@@ -10,13 +10,15 @@ import java.io.IOException;
 public class MainPageController {
 
     public static void main(String[] args) {
-        RestApi restApi = Service.createService(RestApi.class, "localhost");
+        RestApi restApi = Service.createService(RestApi.class, "http://127.0.0.1:8000/");
         Call<User> userRequest = restApi.user("siavash");
+
+        User user = null;
         try {
-            User user = userRequest.execute().body();
-            System.out.println(user.toString());
+            user = userRequest.execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(user.toString());
     }
 }
