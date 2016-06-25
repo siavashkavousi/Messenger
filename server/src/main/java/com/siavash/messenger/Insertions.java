@@ -5,6 +5,8 @@ import com.mongodb.async.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+
 /**
  * Created by sia on 6/25/16.
  */
@@ -39,13 +41,13 @@ public final class Insertions {
         contactsCollection.insertOne(doc, (result, t) -> Util.printInsertionSuccess(Constants.CONTACTS));
     }
 
-    public void insertMessage(ObjectId senderId, String content, ObjectId... receiversId) {
+    public void insertMessage(String senderId, String content, List<String> receiversId) {
         Document doc = new Document("sender_id", senderId)
                 .append("content", content);
 
         Document innerDocument = new Document();
-        for (int i = 0; i < receiversId.length; i++)
-            innerDocument.append("receiver_id" + i, receiversId[i]);
+        for (int i = 0; i < receiversId.size(); i++)
+            innerDocument.append("receiver_id" + i, receiversId.get(i));
         doc.append("receivers", innerDocument);
 
         MongoDatabase db = Util.getDatabase();
