@@ -39,11 +39,12 @@ public class CustomHttpHandler implements HttpHandler {
                     break;
             }
         } else if (httpExchange.getRequestMethod().equals("POST")) {
+            String requestBody;
             switch (path) {
                 case "/user":
                     log.info("POST request with /user url and user data as parameter");
 
-                    String requestBody = readFromInputStream(httpExchange.getRequestBody());
+                    requestBody = readFromInputStream(httpExchange.getRequestBody());
                     User user = gson.fromJson(requestBody, User.class);
 
                     MainApp.insertions.insertUser(
@@ -51,7 +52,21 @@ public class CustomHttpHandler implements HttpHandler {
                             user.getFirstName(),
                             user.getLastName(),
                             user.getPhoneNumber());
-//                    String response =
+                    httpExchange.sendResponseHeaders(200, 0);
+                    break;
+                case "/msg":
+                    log.info("POST request with /msg url and message data as parameter");
+
+                    requestBody = readFromInputStream(httpExchange.getRequestBody());
+                    Message message = gson.fromJson(requestBody, Message.class);
+
+                    System.out.println(message.toString());
+//                    MainApp.insertions.insertMessage(
+//                            message.getSender(),
+//                            message.getContent(),
+//                            message.getReceivers());
+                    httpExchange.sendResponseHeaders(200, 5);
+                    break;
             }
         }
     }
