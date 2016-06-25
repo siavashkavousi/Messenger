@@ -9,7 +9,7 @@ import utils.Constants;
 /**
  * Created by sia on 6/25/16.
  */
-public class InsertionQueries {
+public class Insertions {
 
     public void insertUser(String firstName, String lastName, String phoneNumber) {
         Document doc = new Document("firstName", firstName)
