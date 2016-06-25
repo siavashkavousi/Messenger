@@ -1,4 +1,4 @@
-package utils;
+package com.siavash.messenger.utils;
 
 /**
  * Created by sia on 6/25/16.

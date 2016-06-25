@@ -1,18 +1,26 @@
-package database;
+package com.siavash.messenger.database;
 
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import utils.Constants;
+import com.siavash.messenger.utils.Constants;
 
 /**
  * Created by sia on 6/25/16.
  */
-public class Insertions {
+public final class Insertions {
 
-    public void insertUser(String firstName, String lastName, String phoneNumber) {
-        Document doc = new Document("firstName", firstName)
+    private Insertions() {
+    }
+
+    public static Insertions newInstance() {
+        return new Insertions();
+    }
+
+    public void insertUser(String userName, String firstName, String lastName, String phoneNumber) {
+        Document doc = new Document("_id", userName)
+                .append("firstName", firstName)
                 .append("lastName", lastName)
                 .append("phoneNumber", phoneNumber);
 
@@ -21,9 +29,11 @@ public class Insertions {
         userCollection.insertOne(doc, (result, t) -> Util.printInsertionSuccess(Constants.USER));
     }
 
-    public void insertContacts(ObjectId parentUserId, ObjectId userId) {
+    public void insertContacts(ObjectId parentUserId, ObjectId userId, String firstName, String lastName) {
         Document doc = new Document("_id", new Document("parentUserId", parentUserId)
                 .append("userId", userId));
+
+//        User user =
 
         MongoDatabase db = Util.getDatabase();
         MongoCollection<Document> contactsCollection = db.getCollection(Constants.CONTACTS);
