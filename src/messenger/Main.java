@@ -2,32 +2,52 @@ package messenger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Main extends Application {
     private Stage primaryStage;
     private VBox rootLayout;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Messenger");
 
-        Parent root = FXMLLoader.load(getClass().getResource("root_layout.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 800, 600));
-        primaryStage.show();
+        setUpRootLayout();
+        showMainPage();
     }
 
-    public void setUpRootLayout(){
+    private void setUpRootLayout() {
+        try {
+            rootLayout = FXMLLoader.load(getClass().getResource("root_layout"));
 
+            primaryStage.setScene(new Scene(rootLayout, 800, 600));
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    private void showMainPage(){
+        try {
+            AnchorPane mainPage = FXMLLoader.load(getClass().getResource("main_page"));
 
-    public static void main(String[] args) {
-        launch(args);
+            rootLayout.getChildren().addAll(mainPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 }
