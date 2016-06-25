@@ -1,6 +1,4 @@
-package com.siavash.messenger.database;
-
-import com.siavash.messenger.data.User;
+package com.siavash.messenger;
 
 /**
  * Created by sia on 6/25/16.

@@ -1,7 +1,5 @@
 package com.siavash.messenger;
 
-import com.siavash.messenger.database.Insertions;
-import com.siavash.messenger.database.Queries;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.siavash.messenger.data;
+package com.siavash.messenger;
 
 /**
  * Created by sia on 6/25/16.
