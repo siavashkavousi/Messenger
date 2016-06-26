@@ -1,7 +1,7 @@
 package com.siavash.messenger;
 
 /**
- * Created by sia on 6/25/16.
+ * Created by sia on 6/26/16.
  */
 public class User {
     private String userName;
