@@ -1,4 +1,5 @@
 rootProject.name = 'messenger'
-include 'client'
-include 'server'
+include 'client', 'commons'
+include 'server', 'commons'
+include 'commons'
 
