@@ -15,4 +15,7 @@ public class Constants {
     public static final String CHANNEL = "channel";
     public static final String CHANNEL_MEMBERS = "channel_members";
     public static final String CHANNEL_MESSAGES = "channel_messages";
+
+    public static final String HTTP_ACCEPTED = "OK";
+    public static final String HTTP_BAD_REQUEST = "Bad Request";
 }
