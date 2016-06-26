@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 
 /**
  * Created by sia on 6/26/16.
@@ -33,7 +31,7 @@ public class HttpPostHandler {
                         user.getFirstName(),
                         user.getLastName(),
                         user.getPhoneNumber());
-                sendOkMessage(httpExchange);
+                Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);
                 break;
             }
             case "/msg": {
@@ -46,7 +44,7 @@ public class HttpPostHandler {
 //                    message.getSender(),
 //                    message.getContent(),
 //                    message.getReceivers());
-                sendOkMessage(httpExchange);
+                Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);
                 break;
             }
             case "/contact": {
@@ -60,17 +58,9 @@ public class HttpPostHandler {
                         contact.getContactUserName(),
                         contact.getFirstName(),
                         contact.getLastName());
-                sendOkMessage(httpExchange);
+                Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);
                 break;
             }
         }
-    }
-
-    private void sendOkMessage(HttpExchange httpExchange) throws IOException {
-        String response = Constants.HTTP_ACCEPTED;
-        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_ACCEPTED, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
     }
 }

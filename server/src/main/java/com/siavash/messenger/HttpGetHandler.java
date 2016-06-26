@@ -31,10 +31,7 @@ public class HttpGetHandler {
 
             user = new User("sia", "siavash", "kavousi", "09213456");
             String response = gson.toJson(user);
-            httpExchange.sendResponseHeaders(200, response.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
+            Util.sendResponseMessage(httpExchange, response);
         } else if (path.equals("/msg")) {
             log.info("GET request with /msg url and username as parameter");
 
@@ -45,10 +42,7 @@ public class HttpGetHandler {
 
             user = new User("sia", "siavash", "kavousi", "09213456");
             String response = gson.toJson(user);
-            httpExchange.sendResponseHeaders(200, response.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
+            Util.sendResponseMessage(httpExchange, response);
         }
     }
 }

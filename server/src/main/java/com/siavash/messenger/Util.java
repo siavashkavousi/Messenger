@@ -3,6 +3,11 @@ package com.siavash.messenger;
 import com.mongodb.async.client.MongoClient;
 import com.mongodb.async.client.MongoClients;
 import com.mongodb.async.client.MongoDatabase;
+import com.sun.net.httpserver.HttpExchange;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by sia on 6/25/16.
@@ -23,6 +28,46 @@ class Util {
         db.createCollection(Constants.CHANNEL_MESSAGES, (result, t) -> printSuccessMessage(Constants.CHANNEL_MESSAGES));
     }
 
+    public static void sendResponseMessage(HttpExchange httpExchange, String response) throws IOException {
+        httpExchange.sendResponseHeaders(200, response.length());
+        OutputStream os = httpExchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    }
+
+    public static Map<String, String> queryToMap(String query) {
+        Map<String, String> result = new HashMap<>();
+        for (String param : query.split("&")) {
+            String pair[] = param.split("=");
+            if (pair.length > 1) {
+                result.put(pair[0], pair[1]);
+            } else {
+                result.put(pair[0], "");
+            }
+        }
+        return result;
+    }
+
+    public static String readFromInputStream(InputStream inputStream) {
+        String result = "", line;
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        try {
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     static MongoDatabase getDatabase() {
         return mongoClient.getDatabase(Constants.DATABASE_NAME);
     }
@@ -31,7 +76,7 @@ class Util {
         System.out.println(collectionName + " collection has been created successfully");
     }
 
-    static void printInsertionSuccess(String collectionName){
+    static void printInsertionSuccess(String collectionName) {
         System.out.println("Insertion into " + collectionName + " completed successfully");
     }
 }
