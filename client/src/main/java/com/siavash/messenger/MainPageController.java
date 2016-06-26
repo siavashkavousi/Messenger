@@ -1,9 +1,6 @@
 package com.siavash.messenger;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,14 +25,15 @@ public class MainPageController {
 
         List<String> list = new ArrayList<>();
         list.add("daddy");
-        Call<ResponseBody> sendMessageRequest = restApi.sendMessage(
-                new Message("siavash", "salam khoobi", list));
+//        Call<String> sendMessageRequest = restApi.addMessage(
+//                new Message("siavash", "salam khoobi", list));
 
-        try {
-            sendMessageRequest.execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String x = sendMessageRequest.execute().body();
+//            System.out.println(x);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 //        Call<String> sendUser = restApi.sendUser(new User("siavash", "siavash", "kav", "9123"));
 //        sendUser.execute().body();
