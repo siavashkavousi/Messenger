@@ -2,7 +2,6 @@ package com.siavash.messenger;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
 
 /**
  * Created by sia on 6/27/16.

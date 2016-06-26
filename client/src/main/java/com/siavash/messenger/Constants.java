@@ -5,8 +5,5 @@ package com.siavash.messenger;
  */
 public class Constants {
     public static final String ROOT_LAYOUT_PATH = "/home/sia/IdeaProjects/messenger/client/src/main/resources/com.siavash.messenger/root_layout.fxml";
-    public static final String MAIN_PAGE_PATH = "/home/sia/IdeaProjects/messenger/client/src/main/resources/com.siavash.messenger/main_page.fxml";
-
-    public static final String MENU_FONT_NAME = "Cambria";
-    public static final int MENU_FONT_SIZE = 28;
+    public static final String FIRST_PAGE_PATH = "/home/sia/IdeaProjects/messenger/client/src/main/resources/com.siavash.messenger/first_page.fxml";
 }

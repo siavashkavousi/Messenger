@@ -3,7 +3,7 @@ package com.siavash.messenger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -17,7 +17,6 @@ public class MainApp extends Application {
     private static Logger logger = Logger.getLogger(MainApp.class.getSimpleName());
     private Stage primaryStage;
     private VBox rootLayout;
-    private FXMLLoader loader = new FXMLLoader();
 
     public static void main(String[] args) {
         launch(args);
@@ -28,29 +27,26 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Messenger");
 
-        setUpRootLayout();
-        showMainPage();
-    }
 
-    private void setUpRootLayout() {
         try {
-            rootLayout = Util.loadFxmlObject(loader, Constants.ROOT_LAYOUT_PATH);
-
-            primaryStage.setScene(new Scene(rootLayout, 800, 600));
-            primaryStage.show();
+            setUpRootLayout();
+            showFirstPage();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void showMainPage() {
-        try {
-            SplitPane mainPage = Util.loadFxmlObject(loader, Constants.MAIN_PAGE_PATH);
+    private void setUpRootLayout() throws IOException {
+        rootLayout = Util.loadFxmlObject(new FXMLLoader(), Constants.ROOT_LAYOUT_PATH);
 
-            rootLayout.getChildren().addAll(mainPage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        primaryStage.setScene(new Scene(rootLayout, 800, 600));
+        primaryStage.show();
+    }
+
+    private void showFirstPage() throws IOException {
+        HBox mainPage = Util.loadFxmlObject(new FXMLLoader(), Constants.FIRST_PAGE_PATH);
+        rootLayout.getChildren().add(mainPage);
+        rootLayout.autosize();
     }
 
     public Stage getPrimaryStage() {

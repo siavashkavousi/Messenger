@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      stylesheets="/styles/root_styles.css"
-      fx:controller="com.siavash.messenger.RootController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+      prefWidth="800.0" stylesheets="/styles/root_styles.css" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.siavash.messenger.RootController">
     <children>
-        <HBox styleClass="h-box" prefHeight="30.0" prefWidth="600.0">
+        <HBox prefHeight="30.0" prefWidth="800.0" styleClass="h-box">
             <children>
                 <SplitPane prefHeight="20.0" prefWidth="10.0"/>
                 <Label fx:id="settings" text="Settings" textAlignment="CENTER"/>
@@ -19,6 +17,5 @@
                 <Label fx:id="about" text="About" textAlignment="CENTER"/>
             </children>
         </HBox>
-        <AnchorPane prefHeight="380.0" prefWidth="600.0"/>
     </children>
 </VBox>
