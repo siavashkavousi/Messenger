@@ -30,9 +30,10 @@ public final class Insertions {
         userCollection.insertOne(doc, (result, t) -> Util.printInsertionSuccess(Constants.USER));
     }
 
-    public void insertContacts(ObjectId parentUserId, User user, String firstName, String lastName) {
-        Document doc = new Document("_id", new Document("parentUserId", parentUserId)
-                .append("userId", user.getUserName()))
+    public void insertContacts(String parentUserName, String contactUserName,
+                               String firstName, String lastName) {
+        Document doc = new Document("_id", new Document("parentUserName", parentUserName)
+                .append("contactUserName", contactUserName))
                 .append("firstName", firstName)
                 .append("lastName", lastName);
 

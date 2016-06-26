@@ -13,8 +13,10 @@ public class MainApp {
     public static Insertions insertions = Insertions.newInstance();
 
     public static void main(String[] args) throws IOException {
+        CustomHttpHandler httpHandler = new CustomHttpHandler();
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-        server.createContext("/user", new CustomHttpHandler());
+        server.createContext("/user", httpHandler);
+        server.createContext("/msg", httpHandler);
         server.setExecutor(null);
         server.start();
         System.out.println("waiting for request");
