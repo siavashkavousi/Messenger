@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<fx:root type="javafx.scene.layout.HBox" prefHeight="570.0" prefWidth="540.0" xmlns:fx="http://javafx.com/fxml">
+    <VBox fx:id="received_messages" prefHeight="570.0" prefWidth="250.0"/>
+    <SplitPane styleClass="split-pane" prefHeight="570.0" prefWidth="40.0"/>
+    <VBox fx:id="sent_messages" prefHeight="570.0" prefWidth="250.0"/>
+</fx:root>
