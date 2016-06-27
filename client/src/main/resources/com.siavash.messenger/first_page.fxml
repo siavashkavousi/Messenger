@@ -12,8 +12,8 @@
         <ListView fx:id="messagedContacts" prefWidth="260.0"/>
         <VBox prefHeight="570.0" prefWidth="540.0">
             <children>
-                <AnchorPane styleClass="anchor-pane" prefHeight="540.0"/>
-                <TextField prefHeight="30.0"/>
+                <AnchorPane fx:id="messageArea" styleClass="anchor-pane" prefHeight="540.0"/>
+                <TextField fx:id="message" prefHeight="30.0"/>
             </children>
         </VBox>
     </children>

@@ -28,7 +28,8 @@ public interface RestApi {
     Call<String> addContact(@Body Contact contact);
 
     @GET("msg")
-    Call<Message> message(@Query("username") String userName);
+    Call<List<Message>> message(@Query("receiver_username") String receiverUserName,
+                                @Query("sender_username") String senderUserName);
 
     @POST("msg")
     Call<String> addMessage(@Body Message message);
