@@ -54,8 +54,8 @@ public class HttpPostHandler {
                 Contact contact = gson.fromJson(requestBody, Contact.class);
 
                 MainApp.insertions.insertContacts(
-                        contact.getReceiverUserName(),
-                        contact.getSenderUserName(),
+                        contact.getClientUserName(),
+                        contact.getContactUserName(),
                         contact.getFirstName(),
                         contact.getLastName());
                 Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);

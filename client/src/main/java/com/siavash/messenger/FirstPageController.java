@@ -1,7 +1,6 @@
 package com.siavash.messenger;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -14,6 +13,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by sia on 6/26/16.
@@ -29,11 +29,7 @@ public class FirstPageController {
 
     @FXML
     private void initialize() {
-        ObservableList<ContactView> contacts = FXCollections.observableArrayList(
-                new ContactView(new Image("/images/contact.png"), new Contact("sia", "arr", "Siavash", "Kavousi")),
-                new ContactView(new Image("/images/contact.png"), new Contact("kir", "kos", "kirri", "kirabaadi"))
-        );
-        messagedContacts.setItems(contacts);
+        requestContacts(messagedContacts);
 
         messagedContacts.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -46,34 +42,65 @@ public class FirstPageController {
 
                     ContactMessageView view = new ContactMessageView();
                     // Request messages from user to his/her contact
-                    Call<List<Message>> request = MainApp.restApi.message(oldValue.getReceiverUserName(), oldValue.getSenderUserName());
-                    request.enqueue(new Callback<List<Message>>() {
-                        @Override
-                        public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
-                            List<Message> messages = response.body();
-                            view.addReceivedMessages(messages);
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Message>> call, Throwable t) {
-
-                        }
-                    });
+                    requestReceiverMessages(oldValue, view);
                     // Request messages from his/her contact to user
-                    request = MainApp.restApi.message(oldValue.getSenderUserName(), oldValue.getReceiverUserName());
-                    request.enqueue(new Callback<List<Message>>() {
-                        @Override
-                        public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
-                            List<Message> messages = response.body();
-                            view.addSentMessages(messages);
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Message>> call, Throwable t) {
-
-                        }
-                    });
+                    requestSentMessages(oldValue, view);
                     messageArea.getChildren().add(new ContactMessageView());
                 });
+    }
+
+    private void requestContacts(ListView<ContactView> contactsView) {
+        // FIXME: 6/27/16 client username content (login)
+        Call<List<Contact>> request = MainApp.restApi.contacts("siavash");
+        request.enqueue(new Callback<List<Contact>>() {
+            @Override
+            public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
+                List<Contact> contacts = response.body();
+                contactsView.setItems(FXCollections.observableArrayList(coupleContactsToViews(contacts)));
+            }
+
+            @Override
+            public void onFailure(Call<List<Contact>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private List<ContactView> coupleContactsToViews(List<Contact> contacts) {
+        return contacts.stream()
+                .map(contact -> new ContactView(new Image("/images/contact.png"), contact))
+                .collect(Collectors.toList());
+    }
+
+    private void requestReceiverMessages(ContactView contactView, ContactMessageView view) {
+        Call<List<Message>> request = MainApp.restApi.message(contactView.getContactUserName(), contactView.getClientUserName());
+        request.enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                List<Message> messages = response.body();
+                view.addReceivedMessages(messages);
+            }
+
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void requestSentMessages(ContactView contactView, ContactMessageView view) {
+        Call<List<Message>> request = MainApp.restApi.message(contactView.getClientUserName(), contactView.getContactUserName());
+        request.enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                List<Message> messages = response.body();
+                view.addSentMessages(messages);
+            }
+
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
+
+            }
+        });
     }
 }

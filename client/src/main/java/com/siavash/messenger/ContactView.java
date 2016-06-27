@@ -20,8 +20,8 @@ public class ContactView extends HBox {
     @FXML
     private Label contactLastName;
 
-    private String senderUserName;
-    private String receiverUserName;
+    private String clientUserName;
+    private String contactUserName;
 
     public ContactView(Image image, Contact contact) {
         try {
@@ -37,8 +37,8 @@ public class ContactView extends HBox {
         setImage(image);
         setContactFirstName(contact.getFirstName());
         setContactLastName(contact.getLastName());
-        setSenderUserName(contact.getSenderUserName());
-        setReceiverUserName(contact.getReceiverUserName());
+        setClientUserName(contact.getContactUserName());
+        setContactUserName(contact.getClientUserName());
     }
 
     public Image getImage() {
@@ -65,19 +65,19 @@ public class ContactView extends HBox {
         contactLastName.setText(name);
     }
 
-    public String getSenderUserName() {
-        return senderUserName;
+    public String getClientUserName() {
+        return clientUserName;
     }
 
-    public void setSenderUserName(String senderUserName) {
-        this.senderUserName = senderUserName;
+    public void setClientUserName(String clientUserName) {
+        this.clientUserName = clientUserName;
     }
 
-    public String getReceiverUserName() {
-        return receiverUserName;
+    public String getContactUserName() {
+        return contactUserName;
     }
 
-    public void setReceiverUserName(String receiverUserName) {
-        this.receiverUserName = receiverUserName;
+    public void setContactUserName(String contactUserName) {
+        this.contactUserName = contactUserName;
     }
 }

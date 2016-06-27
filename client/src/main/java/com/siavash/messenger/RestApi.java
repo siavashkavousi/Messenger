@@ -19,7 +19,7 @@ public interface RestApi {
     Call<String> addUser(@Body User user);
 
     @GET("contact")
-    Call<List<Contact>> contacts();
+    Call<List<Contact>> contacts(@Query("client_username") String clientUserName);
 
     @GET("contact")
     Call<Contact> contact(@Query("username") String userName);
@@ -28,8 +28,8 @@ public interface RestApi {
     Call<String> addContact(@Body Contact contact);
 
     @GET("msg")
-    Call<List<Message>> message(@Query("receiver_username") String receiverUserName,
-                                @Query("sender_username") String senderUserName);
+    Call<List<Message>> message(@Query("client_username") String clientUserName,
+                                @Query("contact_username") String contactUserName);
 
     @POST("msg")
     Call<String> addMessage(@Body Message message);

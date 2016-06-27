@@ -4,32 +4,32 @@ package com.siavash.messenger;
  * Created by sia on 6/26/16.
  */
 public class Contact {
-    private String receiverUserName;
-    private String senderUserName;
+    private String clientUserName;
+    private String contactUserName;
     private String firstName;
     private String lastName;
 
-    public Contact(String receiverUserName, String senderUserName, String firstName, String lastName) {
-        this.receiverUserName = receiverUserName;
-        this.senderUserName = senderUserName;
+    public Contact(String clientUserName, String contactUserName, String firstName, String lastName) {
+        this.clientUserName = clientUserName;
+        this.contactUserName = contactUserName;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public String getReceiverUserName() {
-        return receiverUserName;
+    public String getClientUserName() {
+        return clientUserName;
     }
 
-    public void setReceiverUserName(String receiverUserName) {
-        this.receiverUserName = receiverUserName;
+    public void setClientUserName(String clientUserName) {
+        this.clientUserName = clientUserName;
     }
 
-    public String getSenderUserName() {
-        return senderUserName;
+    public String getContactUserName() {
+        return contactUserName;
     }
 
-    public void setSenderUserName(String senderUserName) {
-        this.senderUserName = senderUserName;
+    public void setContactUserName(String contactUserName) {
+        this.contactUserName = contactUserName;
     }
 
     public String getFirstName() {
@@ -51,8 +51,8 @@ public class Contact {
     @Override
     public String toString() {
         return "Contact{" +
-                "receiverUserName='" + receiverUserName + '\'' +
-                ", senderUserName='" + senderUserName + '\'' +
+                "clientUserName='" + clientUserName + '\'' +
+                ", contactUserName='" + contactUserName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
