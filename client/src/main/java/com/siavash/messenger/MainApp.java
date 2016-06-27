@@ -46,7 +46,6 @@ public class MainApp extends Application {
     private void showFirstPage() throws IOException {
         HBox mainPage = Util.loadFxmlObject(new FXMLLoader(), Constants.FIRST_PAGE_PATH);
         rootLayout.getChildren().add(mainPage);
-        rootLayout.autosize();
     }
 
     public Stage getPrimaryStage() {
