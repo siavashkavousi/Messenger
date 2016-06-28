@@ -28,7 +28,6 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Messenger");
 
-
         try {
             setUpRootLayout();
             showFirstPage();
