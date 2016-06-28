@@ -40,10 +40,10 @@ public class HttpPostHandler {
                 String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
                 Message message = gson.fromJson(requestBody, Message.class);
 
-//            MainApp.insertions.insertMessage(
-//                    message.getClient(),
-//                    message.getContent(),
-//                    message.getContacts());
+                MainApp.insertions.insertMessage(
+                        message.getClient(),
+                        message.getContent(),
+                        message.getContacts());
                 Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);
                 break;
             }
@@ -53,7 +53,7 @@ public class HttpPostHandler {
                 String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
                 Contact contact = gson.fromJson(requestBody, Contact.class);
 
-                MainApp.insertions.insertContacts(
+                MainApp.insertions.insertContact(
                         contact.getClientUserName(),
                         contact.getContactUserName(),
                         contact.getFirstName(),

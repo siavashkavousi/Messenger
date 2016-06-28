@@ -14,8 +14,8 @@ import java.util.logging.Logger;
  * Created by sia on 6/26/16.
  */
 public class MainApp extends Application {
-    public static RestApi restApi = Service.createService(RestApi.class, "127.0.0.1:8000");
-    private static Logger logger = Logger.getLogger(MainApp.class.getSimpleName());
+    public static RestApi restApi = Service.createService(RestApi.class, "http://127.0.0.1:8100");
+    private static Logger log = Logger.getLogger(MainApp.class.getSimpleName());
     private Stage primaryStage;
     private VBox rootLayout;
 

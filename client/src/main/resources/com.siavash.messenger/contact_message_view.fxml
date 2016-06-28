@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <fx:root type="javafx.scene.layout.HBox" prefHeight="540.0" prefWidth="540.0" xmlns:fx="http://javafx.com/fxml"
          stylesheets="/styles/contact_message_styles.css">
-    <VBox fx:id="receivedMessages" prefWidth="250.0"/>
+    <VBox fx:id="clientMessages" prefWidth="250.0" alignment="BOTTOM_CENTER"/>
     <SplitPane styleClass="split-pane" prefWidth="40.0"/>
-    <VBox fx:id="sentMessages" prefWidth="250.0"/>
+    <VBox fx:id="contactMessages" prefWidth="250.0" alignment="BOTTOM_CENTER"/>
 </fx:root>

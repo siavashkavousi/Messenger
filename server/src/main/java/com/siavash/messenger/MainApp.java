@@ -13,13 +13,13 @@ import java.net.InetSocketAddress;
 public class MainApp {
     public static Queries queries = Queries.newInstance();
     public static Insertions insertions = Insertions.newInstance();
-    public static MongoClient mongoClient = MongoClients.create("mongodb://localhost");
 
     public static void main(String[] args) throws IOException {
         CustomHttpHandler httpHandler = new CustomHttpHandler();
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(8100), 0);
         server.createContext("/user", httpHandler);
         server.createContext("/msg", httpHandler);
+        server.createContext("/contact", httpHandler);
         server.setExecutor(null);
         server.start();
         System.out.println("waiting for request");
