@@ -2,8 +2,13 @@ package com.siavash.messenger;
 
 import com.mongodb.async.client.MongoClient;
 import com.mongodb.async.client.MongoClients;
+import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
+import com.mongodb.client.model.IndexOptions;
 import com.sun.net.httpserver.HttpExchange;
+import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.HashMap;
@@ -13,19 +18,26 @@ import java.util.Map;
  * Created by sia on 6/25/16.
  */
 class Util {
-    private static MongoClient mongoClient = MongoClients.create();
+    private static final Logger log = LoggerFactory.getLogger(Util.class);
+    public static MongoClient mongoClient = MongoClients.create("mongodb://localhost");
 
     public static void createCollections() {
         MongoDatabase db = getDatabase();
         db.createCollection(Constants.USER, (result, t) -> printSuccessMessage(Constants.USER));
         db.createCollection(Constants.CONTACTS, (result, t) -> printSuccessMessage(Constants.CONTACTS));
         db.createCollection(Constants.MESSAGE, (result, t) -> printSuccessMessage(Constants.MESSAGE));
-        db.createCollection(Constants.GROUP, (result, t) -> printSuccessMessage(Constants.GROUP));
-        db.createCollection(Constants.GROUP_MEMBERS, (result, t) -> printSuccessMessage(Constants.GROUP_MEMBERS));
-        db.createCollection(Constants.GROUP_MESSAGES, (result, t) -> printSuccessMessage(Constants.GROUP_MESSAGES));
-        db.createCollection(Constants.CHANNEL, (result, t) -> printSuccessMessage(Constants.CHANNEL));
-        db.createCollection(Constants.CHANNEL_MEMBERS, (result, t) -> printSuccessMessage(Constants.CHANNEL_MEMBERS));
-        db.createCollection(Constants.CHANNEL_MESSAGES, (result, t) -> printSuccessMessage(Constants.CHANNEL_MESSAGES));
+//        db.createCollection(Constants.GROUP, (result, t) -> printSuccessMessage(Constants.GROUP));
+//        db.createCollection(Constants.GROUP_MEMBERS, (result, t) -> printSuccessMessage(Constants.GROUP_MEMBERS));
+//        db.createCollection(Constants.GROUP_MESSAGES, (result, t) -> printSuccessMessage(Constants.GROUP_MESSAGES));
+//        db.createCollection(Constants.CHANNEL, (result, t) -> printSuccessMessage(Constants.CHANNEL));
+//        db.createCollection(Constants.CHANNEL_MEMBERS, (result, t) -> printSuccessMessage(Constants.CHANNEL_MEMBERS));
+//        db.createCollection(Constants.CHANNEL_MESSAGES, (result, t) -> printSuccessMessage(Constants.CHANNEL_MESSAGES));
+    }
+
+    public static void createIndex(MongoDatabase db) {
+        MongoCollection<Document> userCollection = db.getCollection(Constants.USER);
+        userCollection.createIndex(new Document("clientUserName", 1).append("contactUserName", 1)
+                , new IndexOptions().unique(true), (result, t) -> log.info("db createIndex: user -> success"));
     }
 
     public static void sendResponseMessage(HttpExchange httpExchange, String response) throws IOException {

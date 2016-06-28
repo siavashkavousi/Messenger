@@ -1,5 +1,7 @@
 package com.siavash.messenger;
 
+import com.mongodb.async.client.MongoClient;
+import com.mongodb.async.client.MongoClients;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.net.InetSocketAddress;
 public class MainApp {
     public static Queries queries = Queries.newInstance();
     public static Insertions insertions = Insertions.newInstance();
+    public static MongoClient mongoClient = MongoClients.create("mongodb://localhost");
 
     public static void main(String[] args) throws IOException {
         CustomHttpHandler httpHandler = new CustomHttpHandler();

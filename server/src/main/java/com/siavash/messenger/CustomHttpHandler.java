@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by sia on 6/25/16.
@@ -21,7 +22,11 @@ public class CustomHttpHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         String path = httpExchange.getRequestURI().getPath();
         if (httpExchange.getRequestMethod().equals("GET")) {
-            httpGetHandler.handle(httpExchange, path);
+            try {
+                httpGetHandler.handle(httpExchange, path);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
         } else if (httpExchange.getRequestMethod().equals("POST")) {
             httpPostHandler.handle(httpExchange, path);
         }

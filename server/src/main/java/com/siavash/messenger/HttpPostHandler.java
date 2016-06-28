@@ -41,9 +41,9 @@ public class HttpPostHandler {
                 Message message = gson.fromJson(requestBody, Message.class);
 
 //            MainApp.insertions.insertMessage(
-//                    message.getSender(),
+//                    message.getClient(),
 //                    message.getContent(),
-//                    message.getReceivers());
+//                    message.getContacts());
                 Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);
                 break;
             }
