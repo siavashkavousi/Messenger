@@ -6,22 +6,22 @@ import java.util.List;
  * Created by sia on 6/26/16.
  */
 public class Message {
-    private String sender;
+    private String client;
     private String content;
-    private List<String> receivers;
+    private List<String> contacts;
 
-    public Message(String sender, String content, List<String> receivers) {
-        this.sender = sender;
+    public Message(String client, String content, List<String> contacts) {
+        this.client = client;
         this.content = content;
-        this.receivers = receivers;
+        this.contacts = contacts;
     }
 
-    public String getSender() {
-        return sender;
+    public String getClient() {
+        return client;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setClient(String client) {
+        this.client = client;
     }
 
     public String getContent() {
@@ -32,20 +32,20 @@ public class Message {
         this.content = content;
     }
 
-    public List<String> getReceivers() {
-        return receivers;
+    public List<String> getContacts() {
+        return contacts;
     }
 
-    public void setReceivers(List<String> receivers) {
-        this.receivers = receivers;
+    public void setContacts(List<String> contacts) {
+        this.contacts = contacts;
     }
 
     @Override
     public String toString() {
         return "Message{" +
-                "sender='" + sender + '\'' +
+                "client='" + client + '\'' +
                 ", content='" + content + '\'' +
-                ", receivers=" + receivers +
+                ", contacts=" + contacts +
                 '}';
     }
 }
