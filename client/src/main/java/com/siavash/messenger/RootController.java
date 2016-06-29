@@ -2,16 +2,13 @@ package com.siavash.messenger;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,6 +22,8 @@ public class RootController {
     @FXML
     private Label about;
 
+    private Stage secondaryStage = new Stage();
+
     @FXML
     private void initialize() {
         settings.setOnMouseClicked(event -> {
@@ -36,21 +35,12 @@ public class RootController {
             request.enqueue(new Callback<List<Contact>>() {
                 @Override
                 public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
-                    List<Contact> contacts = response.body();
                     Platform.runLater(() -> {
-                        try {
-                            FXMLLoader loader = new FXMLLoader();
-                            VBox contactsLayout = Util.loadFxmlObject(loader, Constants.CONTACTS_LAYOUT);
-
-                            ContactsController controller = loader.getController();
-                            controller.addContacts(contacts);
-
-                            Stage contactsStage = new Stage();
-                            contactsStage.setScene(new Scene(contactsLayout));
-                            contactsStage.show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        List<Contact> contacts = response.body();
+                        ContactListView view = new ContactListView(secondaryStage);
+                        secondaryStage.setScene(new Scene(view));
+                        secondaryStage.show();
+                        view.addContacts(contacts);
                     });
                 }
 
