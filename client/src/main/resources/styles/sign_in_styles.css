@@ -1,6 +1,4 @@
-.split-pane {
-    -fx-background-color: none;
-}
+@import "global_styles.css";
 
 .border-pane {
     -fx-background-color: #0088cc;
