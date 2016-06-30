@@ -20,8 +20,8 @@ public class HttpPostHandler {
 
     public void handle(HttpExchange httpExchange, String path) throws IOException {
         switch (path) {
-            case "/user": {
-                log.info("POST request with /user url and user data as parameter");
+            case "/sign_up": {
+                log.info("POST request with /sign_up url and user data as parameter");
 
                 String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
                 User user = gson.fromJson(requestBody, User.class);
@@ -32,7 +32,9 @@ public class HttpPostHandler {
                         user.getFirstName(),
                         user.getLastName(),
                         user.getPhoneNumber());
-                Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);
+
+                String response = gson.toJson(new Response("200", Constants.HTTP_ACCEPTED));
+                Util.sendResponseMessage(httpExchange, response);
                 break;
             }
             case "/msg": {

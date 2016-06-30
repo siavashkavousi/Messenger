@@ -1,7 +1,5 @@
 package com.siavash.messenger;
 
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -18,6 +16,7 @@ public class MainApp {
         CustomHttpHandler httpHandler = new CustomHttpHandler();
         HttpServer server = HttpServer.create(new InetSocketAddress(8100), 0);
         server.createContext("/sign_in", httpHandler);
+        server.createContext("/sign_up", httpHandler);
         server.createContext("/user", httpHandler);
         server.createContext("/msg", httpHandler);
         server.createContext("/contact", httpHandler);
