@@ -62,6 +62,7 @@ public class SignUp implements ParentProvider {
                 if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {
                     log.info("signUp: onResponse -> success: " + message);
                     Util.user = user;
+                    parent.loadScreen(Screens.FIRST_PAGE.id, Screens.FIRST_PAGE.resource);
                     postResultSuccess.run();
                 } else {
                     log.info("signUp: onResponse -> failure: " + message);

@@ -41,6 +41,7 @@ public class SignIn implements ParentProvider {
                 if (user != null) {
                     log.info("signIn: onResponse -> " + user.toString());
                     Util.user = user;
+                    parent.loadScreen(Screens.FIRST_PAGE.id, Screens.FIRST_PAGE.resource);
                     postResult.run();
                 } else {
                     //// FIXME: 6/30/16 not found notification should be shown
