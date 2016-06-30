@@ -60,6 +60,9 @@ public class FirstPage implements ParentProvider {
                     requestMessages(contactView.getContactUserName(),
                             contactView.getClientUserName(),
                             view::addContactMessages);
+                    // Adds first name and last name of contact
+                    view.setContactFirstName(contactView.getContactFirstName());
+                    view.setContactLastName(contactView.getContactLastName());
                     messageArea.getChildren().add(view);
 
                     currentContact = contactView;
@@ -73,6 +76,7 @@ public class FirstPage implements ParentProvider {
 
                 Message content = new Message(Util.user.getUserName(), message.getText(), contacts);
                 sendMessage(content, () -> currentContactMessages.addClientMessage(content));
+                message.clear();
             }
         });
     }
@@ -126,7 +130,7 @@ public class FirstPage implements ParentProvider {
                 com.siavash.messenger.Response message = response.body();
                 if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {
                     log.info("sendMessage: onResponse -> success: " + message);
-                    Platform.runLater(postResult::run);
+                    Platform.runLater(postResult);
                 } else {
                     log.info("sendMessage: onResponse -> failure: " + message);
                 }
@@ -134,7 +138,6 @@ public class FirstPage implements ParentProvider {
 
             @Override
             public void onFailure(Call<com.siavash.messenger.Response> call, Throwable t) {
-
             }
         });
     }
