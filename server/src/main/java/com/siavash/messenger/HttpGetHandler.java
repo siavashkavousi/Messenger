@@ -33,11 +33,7 @@ public class HttpGetHandler {
                     .findUser(username);
             User user = futureUser.get();
 
-            String response;
-            if (user != null)
-                response = gson.toJson(user);
-            else
-                response = "not found";
+            String response = gson.toJson(user);
             Util.sendResponseMessage(httpExchange, response);
         } else if (path.equals("/msg")) {
             log.info("GET request with /msg url and client_username, contact_username as parameters");
