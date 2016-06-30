@@ -12,14 +12,14 @@ import java.util.List;
  * Created by sia on 6/25/16.
  */
 public interface RestApi {
-    @GET("user")
-    Call<User> user(@Query("username") String userName);
+    @GET("findUser")
+    Call<User> findUser(@Query("username") String userName);
 
     @GET("sign_in")
     Call<User> signIn(@Query("username") String userName, @Query("password") String password);
 
-    @POST("user")
-    Call<String> addUser(@Body User user);
+    @POST("sign_up")
+    Call<String> signUp(@Body User user);
 
     @GET("contact")
     Call<List<Contact>> contacts(@Query("client_username") String clientUserName);

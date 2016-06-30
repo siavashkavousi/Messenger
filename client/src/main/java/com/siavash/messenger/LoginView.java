@@ -41,11 +41,11 @@ public class LoginView extends BorderPane {
     }
 
     private void checkIfUserExists() {
-        MainApp.restApi.user(userName.getText()).enqueue(new Callback<User>() {
+        MainApp.restApi.findUser(userName.getText()).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User user = response.body();
-                log.info("checkIfUserExists: user -> " + user.toString());
+                log.info("checkIfUserExists: findUser -> " + user.toString());
             }
 
             @Override

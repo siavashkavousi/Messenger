@@ -15,12 +15,5 @@ public class Constants {
     public static final int HEIGHT = 570;
 
     public static final String RESOURCES_PATH = "/home/sia/IdeaProjects/messenger/client/src/main/resources/com.siavash.messenger/";
-    public static final String ADD_CONTACT_ID = "add_contact_id";
-    public static final String ADD_CONTACT_PATH = "add_contact_layout";
-    public static final String CONTACT_LIST_ID = "contact_list_id";
-    public static final String CONTACT_LIST_PATH = "contact_list_layout";
-    public static final String CONTACT_MESSAGES_ID = "contact_messages_id";
-    public static final String CONTACT_MESSAGES_PATH = "contact_messages_layout";
-    public static final String CONTACT_ID = "contact_id";
-    public static final String CONTACT_PATH = "contact_layout";
+    public static final String SUCCESS = "success";
 }
