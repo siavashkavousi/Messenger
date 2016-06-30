@@ -43,8 +43,9 @@ public class SignUp implements ParentProvider {
     }
 
     private void signUp(Runnable postResultSuccess, Runnable postResultFailure) {
-        MainApp.restApi.signUp(new User(userName.getText(), password.getText(), firstName.getText(),
-                lastName.getText(), phoneNumber.getText())).enqueue(new Callback<com.siavash.messenger.Response>() {
+        User user = new User(userName.getText(), password.getText(), firstName.getText(),
+                lastName.getText(), phoneNumber.getText());
+        MainApp.restApi.signUp(user).enqueue(new Callback<com.siavash.messenger.Response>() {
             @Override
             public void onResponse(Call<com.siavash.messenger.Response> call, Response<com.siavash.messenger.Response> response) {
                 log.info("signUp: onResponse -> response status code: " + response.code());
@@ -60,6 +61,7 @@ public class SignUp implements ParentProvider {
                 com.siavash.messenger.Response message = response.body();
                 if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {
                     log.info("signUp: onResponse -> success: " + message);
+                    Util.user = user;
                     postResultSuccess.run();
                 } else {
                     log.info("signUp: onResponse -> failure: " + message);
