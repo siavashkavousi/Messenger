@@ -39,7 +39,7 @@ public class SignIn implements ParentProvider {
             public void onResponse(Call<User> call, Response<User> response) {
                 User user = response.body();
                 if (user != null) {
-                    log.info("signIn: findUser -> " + user.toString());
+                    log.info("signIn: onResponse -> " + user.toString());
                     postResult.run();
                 } else {
                     //// FIXME: 6/30/16 not found notification should be shown

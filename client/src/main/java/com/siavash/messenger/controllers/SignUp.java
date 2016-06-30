@@ -10,6 +10,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.io.IOException;
+
 /**
  * Created by sia on 6/30/16.
  */
@@ -37,24 +39,37 @@ public class SignUp implements ParentProvider {
 
         //// FIXME: 6/30/16 notification for try again
         signUp.setOnAction(event ->
-                signUp(()->parent.setScreen(Screens.FIRST_PAGE.id), ()-> log.info("try again!!!")));
+                signUp(() -> parent.setScreen(Screens.FIRST_PAGE.id), () -> log.info("try again!!!")));
     }
 
     private void signUp(Runnable postResultSuccess, Runnable postResultFailure) {
         MainApp.restApi.signUp(new User(userName.getText(), password.getText(), firstName.getText(),
-                lastName.getText(), phoneNumber.getText())).enqueue(new Callback<String>() {
+                lastName.getText(), phoneNumber.getText())).enqueue(new Callback<com.siavash.messenger.Response>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                String message = response.body();
-                if (message != null && message.equals(Constants.SUCCESS))
+            public void onResponse(Call<com.siavash.messenger.Response> call, Response<com.siavash.messenger.Response> response) {
+                log.info("signUp: onResponse -> response status code: " + response.code());
+                if (!response.isSuccessful()) {
+                    try {
+                        log.info(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
+
+                com.siavash.messenger.Response message = response.body();
+                if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {
+                    log.info("signUp: onResponse -> success: " + message);
                     postResultSuccess.run();
-                else
+                } else {
+                    log.info("signUp: onResponse -> failure: " + message);
                     postResultFailure.run();
+                }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
+            public void onFailure(Call<com.siavash.messenger.Response> call, Throwable t) {
+                log.info("signUp: onFailure -> something happened!");
             }
         });
     }
