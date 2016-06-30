@@ -17,6 +17,7 @@ public class MainApp {
     public static void main(String[] args) throws IOException {
         CustomHttpHandler httpHandler = new CustomHttpHandler();
         HttpServer server = HttpServer.create(new InetSocketAddress(8100), 0);
+        server.createContext("/sign_in", httpHandler);
         server.createContext("/user", httpHandler);
         server.createContext("/msg", httpHandler);
         server.createContext("/contact", httpHandler);
