@@ -1,5 +1,8 @@
-package com.siavash.messenger;
+package com.siavash.messenger.views;
 
+import com.siavash.messenger.Contact;
+import com.siavash.messenger.Util;
+import com.siavash.messenger.Views;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -29,7 +32,7 @@ public class ContactView extends HBox {
             loader.setRoot(this);
             loader.setController(this);
 
-            loader.load(Util.getInputStream(Constants.CONTACT_VIEW_PATH));
+            loader.load(Util.getInputStream(Util.getAbsolutePath(Views.CONTACT.resource)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,8 +40,8 @@ public class ContactView extends HBox {
         setImage(image);
         setContactFirstName(contact.getFirstName());
         setContactLastName(contact.getLastName());
-        setClientUserName(contact.getContactUserName());
-        setContactUserName(contact.getClientUserName());
+        setClientUserName(contact.getClientUserName());
+        setContactUserName(contact.getContactUserName());
     }
 
     public Image getImage() {
