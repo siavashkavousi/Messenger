@@ -41,7 +41,7 @@
                 <SplitPane maxHeight="20.0" prefHeight="20.0" prefWidth="240.0"/>
                 <HBox prefWidth="200.0">
                     <children>
-                        <Button fx:id="back" mnemonicParsing="false" prefWidth="80.0" text="Sign In"/>
+                        <Button fx:id="back" mnemonicParsing="false" prefWidth="80.0" text="Back"/>
                         <SplitPane prefHeight="20.0" prefWidth="150.0"/>
                         <Button fx:id="signUp" mnemonicParsing="false" prefWidth="80.0" text="Sign Up"/>
                     </children>
