@@ -48,33 +48,4 @@ public class MainApp extends Application {
         }
         return null;
     }
-
-//    @Override
-//    public void start(Stage primaryStage) {
-//        this.primaryStage = primaryStage;
-//        primaryStage.setTitle("Messenger");
-//
-//        try {
-//            setUpRootLayout();
-//            showFirstPage();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private void setUpRootLayout() throws IOException {
-//        rootLayout = Util.loadFxmlObject(new FXMLLoader(), Constants.ROOT_LAYOUT_PATH);
-//
-//        primaryStage.setScene(new Scene(rootLayout, 800, 600));
-//        primaryStage.show();
-//    }
-
-//    @Override
-//    public void changeScene(SubScene from, SubScene to, boolean withAnimation) {
-//    }
-
-//    private void showFirstPage() throws IOException {
-//        HBox mainPage = Util.loadFxmlObject(new FXMLLoader(), Constants.FIRST_PAGE_PATH);
-//        rootLayout.getChildren().add(mainPage);
-//    }
 }
