@@ -49,14 +49,8 @@ public class SignUp implements ParentProvider {
             @Override
             public void onResponse(Call<com.siavash.messenger.Response> call, Response<com.siavash.messenger.Response> response) {
                 log.info("signUp: onResponse -> response status code: " + response.code());
-                if (!response.isSuccessful()) {
-                    try {
-                        log.info(response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                if(!Util.checkResponseMessage(response))
                     return;
-                }
 
                 com.siavash.messenger.Response message = response.body();
                 if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {

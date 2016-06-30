@@ -32,5 +32,5 @@ public interface RestApi {
                                 @Query("contact_username") String contactUserName);
 
     @POST("msg")
-    Call<String> addMessage(@Body Message message);
+    Call<Response> addMessage(@Body Message message);
 }
