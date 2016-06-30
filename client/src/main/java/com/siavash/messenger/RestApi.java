@@ -21,9 +21,6 @@ public interface RestApi {
     @GET("contact")
     Call<List<Contact>> contacts(@Query("client_username") String clientUserName);
 
-    @GET("contact")
-    Call<Contact> contact(@Query("username") String userName);
-
     @POST("contact")
     Call<String> addContact(@Body Contact contact);
 

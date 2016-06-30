@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<fx:root prefHeight="540.0" prefWidth="540.0" stylesheets="/styles/contact_message_styles.css"
+         type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox prefHeight="40.0" prefWidth="540.0">
+            <children>
+                <SplitPane prefWidth="20.0"/>
+                <Label fx:id="contactFirstName" text="First Name"/>
+                <SplitPane prefWidth="20.0"/>
+                <Label fx:id="contactLastName" text="Last Name"/>
+            </children>
+        </HBox>
+        <HBox prefHeight="500.0" prefWidth="540.0">
+            <children>
+                <VBox fx:id="clientMessages" alignment="BOTTOM_CENTER" prefWidth="250.0"/>
+                <SplitPane prefWidth="40.0" styleClass="split-pane"/>
+                <VBox fx:id="contactMessages" alignment="BOTTOM_CENTER" prefWidth="250.0"/>
+            </children>
+        </HBox>
+    </children>
+</fx:root>

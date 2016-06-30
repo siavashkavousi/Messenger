@@ -1,5 +1,6 @@
-package com.siavash.messenger;
+package com.siavash.messenger.controllers;
 
+import com.siavash.messenger.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -19,8 +20,8 @@ import java.util.stream.Collectors;
 /**
  * Created by sia on 6/26/16.
  */
-public class FirstPageController {
-    private static Logger log = LoggerFactory.getLogger(FirstPageController.class.getSimpleName());
+public class FirstPage implements ParentProvider {
+    private static Logger log = LoggerFactory.getLogger(FirstPage.class.getSimpleName());
     @FXML
     private ListView<ContactView> messagedContacts;
     @FXML
@@ -41,12 +42,12 @@ public class FirstPageController {
                         System.out.println("No child in AnchorPane - " + e.getMessage());
                     }
 
-                    ContactMessageView view = new ContactMessageView();
+                    ContactMessages view = new ContactMessages();
                     // Request messages from user to his/her contact
                     requestClientMessages(newValue, view);
                     // Request messages from his/her contact to user
                     requestContactMessages(newValue, view);
-                    messageArea.getChildren().add(view);
+//                    messageArea.getChildren().add(view);
                 });
     }
 
@@ -65,6 +66,7 @@ public class FirstPageController {
 
             }
         });
+
     }
 
     private List<ContactView> coupleContactsToViews(List<Contact> contacts) {
@@ -73,7 +75,7 @@ public class FirstPageController {
                 .collect(Collectors.toList());
     }
 
-    private void requestClientMessages(ContactView contactView, ContactMessageView view) {
+    private void requestClientMessages(ContactView contactView, ContactMessages view) {
         Call<List<Message>> request = MainApp.restApi.message(contactView.getContactUserName(), contactView.getClientUserName());
         request.enqueue(new Callback<List<Message>>() {
             @Override
@@ -89,7 +91,7 @@ public class FirstPageController {
         });
     }
 
-    private void requestContactMessages(ContactView contactView, ContactMessageView view) {
+    private void requestContactMessages(ContactView contactView, ContactMessages view) {
         Call<List<Message>> request = MainApp.restApi.message(contactView.getClientUserName(), contactView.getContactUserName());
         request.enqueue(new Callback<List<Message>>() {
             @Override
@@ -103,5 +105,10 @@ public class FirstPageController {
 
             }
         });
+    }
+
+    @Override
+    public void setParent(ScreenManager screen) {
+
     }
 }

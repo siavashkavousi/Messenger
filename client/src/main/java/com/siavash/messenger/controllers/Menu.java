@@ -1,5 +1,8 @@
-package com.siavash.messenger;
+package com.siavash.messenger.controllers;
 
+import com.siavash.messenger.Contact;
+import com.siavash.messenger.ContactListView;
+import com.siavash.messenger.MainApp;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -14,7 +17,7 @@ import java.util.List;
 /**
  * Created by sia on 6/27/16.
  */
-public class RootController {
+public class Menu {
     @FXML
     private Label settings;
     @FXML
