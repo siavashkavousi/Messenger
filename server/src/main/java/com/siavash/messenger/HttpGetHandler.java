@@ -23,56 +23,65 @@ public class HttpGetHandler {
     }
 
     public void handle(HttpExchange httpExchange, String path) throws IOException, ExecutionException, InterruptedException {
-        if (path.equals("/user")) {
-            log.info("GET request with /user url and username as parameter");
+        switch (path) {
+            case "/user": {
+                log.info("GET request with /user url and username as parameter");
 
-            Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
-            String username = queryMap.get("username");
+                Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+                String username = queryMap.get("username");
 
-            CompletableFuture<User> futureUser = MainApp.queries
-                    .findUser(username);
-            User user = futureUser.get();
+                CompletableFuture<User> futureUser = MainApp.queries
+                        .findUser(username);
+                User user = futureUser.get();
 
-            String response = gson.toJson(user);
-            Util.sendResponseMessage(httpExchange, response);
-        } else if (path.equals("/msg")) {
-            log.info("GET request with /msg url and client_username, contact_username as parameters");
+                String response = gson.toJson(user);
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/msg": {
+                log.info("GET request with /msg url and client_username, contact_username as parameters");
 
-            Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
-            String clientUserName = queryMap.get("client_username");
-            String contactUserName = queryMap.get("contact_username");
+                Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+                String clientUserName = queryMap.get("client_username");
+                String contactUserName = queryMap.get("contact_username");
 
-            CompletableFuture<List<Message>> futureMessages = MainApp.queries
-                    .findMessages(clientUserName, contactUserName);
-            List<Message> messages = futureMessages.get();
+                CompletableFuture<List<Message>> futureMessages = MainApp.queries
+                        .findMessages(clientUserName, contactUserName);
+                List<Message> messages = futureMessages.get();
 
-            String response = gson.toJson(messages);
-            Util.sendResponseMessage(httpExchange, response);
-        } else if (path.equals("/contact")) {
-            log.info("GET request with /contact url and client_username as parameters");
+                String response = gson.toJson(messages);
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/contact": {
+                log.info("GET request with /contact url and client_username as parameters");
 
-            Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
-            String clientUserName = queryMap.get("client_username");
+                Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+                String clientUserName = queryMap.get("client_username");
 
-            CompletableFuture<List<Contact>> futureContacts = MainApp.queries
-                    .findContacts(clientUserName);
-            List<Contact> contacts = futureContacts.get();
+                CompletableFuture<List<Contact>> futureContacts = MainApp.queries
+                        .findContacts(clientUserName);
+                List<Contact> contacts = futureContacts.get();
 
-            String response = gson.toJson(contacts);
-            Util.sendResponseMessage(httpExchange, response);
-        } else if (path.equals("/sign_in")) {
-            log.info("GET request with /sign_in url and client username and password as parameters");
+                String response = gson.toJson(contacts);
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/sign_in": {
+                log.info("GET request with /sign_in url and client username and password as parameters");
 
-            Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
-            String userName = queryMap.get("username");
-            String password = queryMap.get("password");
+                Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+                String userName = queryMap.get("username");
+                String password = queryMap.get("password");
 
-            CompletableFuture<User> futureContacts = MainApp.queries
-                    .signInUser(userName, password);
-            User user = futureContacts.get();
+                CompletableFuture<User> futureContacts = MainApp.queries
+                        .signInUser(userName, password);
+                User user = futureContacts.get();
 
-            String response = gson.toJson(user);
-            Util.sendResponseMessage(httpExchange, response);
+                String response = gson.toJson(user);
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
         }
     }
 }
