@@ -1,0 +1,5 @@
+@import "global_styles.css";
+
+.border-pane {
+    -fx-background-color: #0088cc;
+}

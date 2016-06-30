@@ -1,5 +1,9 @@
-package com.siavash.messenger;
+package com.siavash.messenger.rest;
 
+import com.siavash.messenger.Contact;
+import com.siavash.messenger.Message;
+import com.siavash.messenger.Response;
+import com.siavash.messenger.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

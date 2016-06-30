@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0"
-            prefWidth="800.0" stylesheets="/styles/sign_in_styles.css" xmlns="http://javafx.com/javafx/8"
+            prefWidth="800.0" stylesheets="/styles/sign_up_styles.css" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.siavash.messenger.controllers.SignUp">
     <center>
         <VBox maxHeight="210" maxWidth="310" prefHeight="210.0" prefWidth="310.0" BorderPane.alignment="CENTER">

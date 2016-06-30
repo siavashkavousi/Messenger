@@ -1,4 +1,4 @@
-package com.siavash.messenger;
+package com.siavash.messenger.rest;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -18,7 +18,7 @@ public class Service {
         return client.build();
     }
 
-    static <T> T createService(Class<T> serviceClass, String baseUrl) {
+    public static <T> T createService(Class<T> serviceClass, String baseUrl) {
         OkHttpClient client = createClient();
 
         return new Retrofit.Builder().baseUrl(baseUrl)
@@ -28,7 +28,7 @@ public class Service {
                 .create(serviceClass);
     }
 
-    static <T> T createService(Class<T> serviceClass, HttpUrl baseUrl) {
+    public static <T> T createService(Class<T> serviceClass, HttpUrl baseUrl) {
         OkHttpClient client = createClient();
 
         return new Retrofit.Builder().baseUrl(baseUrl)

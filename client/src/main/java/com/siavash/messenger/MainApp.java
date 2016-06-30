@@ -1,5 +1,7 @@
 package com.siavash.messenger;
 
+import com.siavash.messenger.rest.RestApi;
+import com.siavash.messenger.rest.Service;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;

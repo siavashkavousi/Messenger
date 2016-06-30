@@ -4,13 +4,12 @@ package com.siavash.messenger;
  * Created by sia on 6/30/16.
  */
 public enum Screens {
-    ADD_CONTACT("add_contact_id", "add_contact_layout"),
-    CONTACT_LIST("contact_list_id", "contact_list_layout"),
-    CONTACT_MESSAGES("contact_messages_id", "contact_messages_layout"),
-    FIRST_PAGE("first_page_id", "first_page_layout"),
-    SIGN_IN("sign_in", "sign_in_layout"),
-    SIGN_UP("sign_up", "sign_up_layout"),
-    MENU("menu_id", "menu_layout");
+    ADD_CONTACT("add_contact_id", "layout_add_contact"),
+    CONTACT_LIST("contact_list_id", "layout_contact_list"),
+    FIRST_PAGE("first_page_id", "layout_first_page"),
+    SIGN_IN("sign_in", "layout_sign_in"),
+    SIGN_UP("sign_up", "layout_sign_up"),
+    MENU("menu_id", "layout_menu");
 
     public String id, resource;
 
