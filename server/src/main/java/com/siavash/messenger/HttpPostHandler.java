@@ -47,7 +47,9 @@ public class HttpPostHandler {
                         message.getClient(),
                         message.getContent(),
                         message.getContacts());
-                Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);
+
+                String response = gson.toJson(new Response("200", Constants.HTTP_ACCEPTED));
+                Util.sendResponseMessage(httpExchange, response);
                 break;
             }
             case "/contact": {
