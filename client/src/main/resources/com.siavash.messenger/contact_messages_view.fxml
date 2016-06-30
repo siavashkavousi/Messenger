@@ -5,7 +5,7 @@
 <fx:root prefHeight="540.0" prefWidth="540.0" stylesheets="/styles/contact_message_styles.css"
          type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <HBox prefHeight="40.0" prefWidth="540.0">
+        <HBox styleClass="h-box" prefHeight="40.0" prefWidth="540.0">
             <children>
                 <SplitPane prefWidth="20.0"/>
                 <Label fx:id="contactFirstName" text="First Name"/>
