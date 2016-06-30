@@ -5,12 +5,14 @@ package com.siavash.messenger;
  */
 public class User {
     private String userName;
+    private String password;
     private String firstName;
     private String lastName;
     private String phoneNumber;
 
-    public User(String userName, String firstName, String lastName, String phoneNumber) {
+    public User(String userName, String password, String firstName, String lastName, String phoneNumber) {
         this.userName = userName;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -22,6 +24,14 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {

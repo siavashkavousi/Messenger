@@ -28,6 +28,7 @@ public class HttpPostHandler {
 
                 MainApp.insertions.insertUser(
                         user.getUserName(),
+                        user.getPassword(),
                         user.getFirstName(),
                         user.getLastName(),
                         user.getPhoneNumber());
@@ -48,7 +49,7 @@ public class HttpPostHandler {
                 break;
             }
             case "/contact": {
-                log.info("POST request with /contact url and user data as parameter");
+                log.info("POST request with /contact url and contact data as parameter");
 
                 String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
                 Contact contact = gson.fromJson(requestBody, Contact.class);

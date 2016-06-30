@@ -20,14 +20,16 @@ public final class Insertions {
         return new Insertions();
     }
 
-    public void insertUser(String userName, String firstName, String lastName, String phoneNumber) {
+    public void insertUser(String userName, String password,
+                           String firstName, String lastName, String phoneNumber) {
         Document doc = new Document("_id", userName)
+                .append("password", password)
                 .append("firstName", firstName)
                 .append("lastName", lastName)
                 .append("phoneNumber", phoneNumber);
 
         MongoCollection<Document> userCollection = db.getCollection(Constants.USER);
-        userCollection.insertOne(doc, (result, t) -> Util.printInsertionSuccess(Constants.USER));
+        userCollection.insertOne(doc, (result, t) -> Util.logInsertionSuccess(Constants.USER));
     }
 
     public void insertContact(String clientUserName, String contactUserName,
@@ -38,7 +40,7 @@ public final class Insertions {
                 .append("lastName", lastName);
 
         MongoCollection<Document> contactsCollection = db.getCollection(Constants.CONTACTS);
-        contactsCollection.insertOne(doc, (result, t) -> Util.printInsertionSuccess(Constants.CONTACTS));
+        contactsCollection.insertOne(doc, (result, t) -> Util.logInsertionSuccess(Constants.CONTACTS));
     }
 
     public void insertMessage(String clientUserName, String content, List<String> contactsUserName) {
@@ -47,7 +49,7 @@ public final class Insertions {
                 .append("contactsUserName", contactsUserName);
 
         MongoCollection<Document> messageCollection = db.getCollection(Constants.MESSAGE);
-        messageCollection.insertOne(doc, (result, t) -> Util.printInsertionSuccess(Constants.MESSAGE));
+        messageCollection.insertOne(doc, (result, t) -> Util.logInsertionSuccess(Constants.MESSAGE));
     }
 
     public void insertGroup(ObjectId creatorId, String title, String groupId) {
@@ -56,6 +58,6 @@ public final class Insertions {
                 .append("group_id", groupId);
 
         MongoCollection<Document> groupCollection = db.getCollection(Constants.GROUP);
-        groupCollection.insertOne(doc, (result, t) -> Util.printInsertionSuccess(Constants.GROUP));
+        groupCollection.insertOne(doc, (result, t) -> Util.logInsertionSuccess(Constants.GROUP));
     }
 }

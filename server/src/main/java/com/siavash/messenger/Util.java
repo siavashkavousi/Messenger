@@ -85,10 +85,10 @@ class Util {
     }
 
     private static void printSuccessMessage(String collectionName) {
-        System.out.println(collectionName + " collection has been created successfully");
+        log.info(collectionName + " collection has been created successfully");
     }
 
-    static void printInsertionSuccess(String collectionName) {
-        System.out.println("Insertion into " + collectionName + " completed successfully");
+    static void logInsertionSuccess(String collectionName) {
+        log.info("Insertion into " + collectionName + " completed successfully");
     }
 }

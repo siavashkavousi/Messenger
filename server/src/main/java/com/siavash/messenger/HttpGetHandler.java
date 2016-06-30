@@ -28,12 +28,17 @@ public class HttpGetHandler {
 
             Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
             String username = queryMap.get("username");
-            log.info("requested username: " + username);
-//            User user = MainApp.queries.findUser(username);
 
-//            user = new User("sia", "siavash", "kavousi", "09213456");
-//            String response = gson.toJson(user);
-//            Util.sendResponseMessage(httpExchange, response);
+            CompletableFuture<User> futureUser = MainApp.queries
+                    .findUser(username);
+            User user = futureUser.get();
+
+            String response;
+            if (user != null)
+                response = gson.toJson(user);
+            else
+                response = "not found";
+            Util.sendResponseMessage(httpExchange, response);
         } else if (path.equals("/msg")) {
             log.info("GET request with /msg url and client_username, contact_username as parameters");
 
@@ -47,7 +52,7 @@ public class HttpGetHandler {
 
             String response = gson.toJson(messages);
             Util.sendResponseMessage(httpExchange, response);
-        } else if (path.equals("/contact")){
+        } else if (path.equals("/contact")) {
             log.info("GET request with /contact url and client_username as parameters");
 
             Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
@@ -58,6 +63,19 @@ public class HttpGetHandler {
             List<Contact> contacts = futureContacts.get();
 
             String response = gson.toJson(contacts);
+            Util.sendResponseMessage(httpExchange, response);
+        } else if (path.equals("/sign_in")) {
+            log.info("GET request with /sign_in url and client username and password as parameters");
+
+            Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+            String userName = queryMap.get("username");
+            String password = queryMap.get("password");
+
+            CompletableFuture<User> futureContacts = MainApp.queries
+                    .signInUser(userName, password);
+            User user = futureContacts.get();
+
+            String response = gson.toJson(user);
             Util.sendResponseMessage(httpExchange, response);
         }
     }

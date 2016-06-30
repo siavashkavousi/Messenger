@@ -28,13 +28,31 @@ public class Queries {
         return new Queries();
     }
 
+    public CompletableFuture<User> signInUser(String userName, String password) {
+        CompletableFuture<User> futureUser = new CompletableFuture<>();
+        userCollection.find(new Document("_id", userName).append("password", password)).into(new ArrayList<>(),
+                (result, t) -> {
+                    log.info("db query: signInUser -> found documents: #" + result.size());
+                    List<User> users = convertDocumentsToUsers(result);
+                    if (users.size() != 0)
+                        futureUser.complete(users.get(0));
+                    else
+                        futureUser.complete(null);
+                });
+        return futureUser;
+    }
+
     public CompletableFuture<User> findUser(String userName) {
         CompletableFuture<User> futureUser = new CompletableFuture<>();
+        // // FIXME: 6/29/16 how to change the arraylist to single item!!!
         userCollection.find(new Document("_id", userName)).into(new ArrayList<>(),
                 (result, t) -> {
                     log.info("db query: findUser -> found documents: #" + result.size());
                     List<User> users = convertDocumentsToUsers(result);
-                    futureUser.complete(users.get(0));
+                    if (users.size() != 0)
+                        futureUser.complete(users.get(0));
+                    else
+                        futureUser.complete(null);
                 });
         return futureUser;
     }
@@ -64,6 +82,7 @@ public class Queries {
 
     private List<User> convertDocumentsToUsers(List<Document> documents) {
         return documents.stream().map(document -> new User(document.getString("_id"),
+                document.getString("password"),
                 document.getString("firstName"),
                 document.getString("lastName"),
                 document.getString("phoneNumber"))).collect(Collectors.toList());
