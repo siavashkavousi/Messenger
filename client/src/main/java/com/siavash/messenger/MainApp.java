@@ -25,10 +25,12 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         ScreenManager manager = new ScreenManager();
-        manager.loadScreen(Screens.CONTACT_MESSAGES.id, Screens.CONTACT_MESSAGES.resource);
+        manager.loadScreen(Screens.SIGN_UP.id, Screens.SIGN_UP.resource);
+        manager.loadScreen(Screens.SIGN_IN.id, Screens.SIGN_IN.resource);
         manager.loadScreen(Screens.FIRST_PAGE.id, Screens.FIRST_PAGE.resource);
+        manager.loadScreen(Screens.CONTACT_MESSAGES.id, Screens.CONTACT_MESSAGES.resource);
 
-        manager.setScreen(Screens.FIRST_PAGE.id);
+        manager.setScreen(Screens.SIGN_IN.id);
 
         Group root = new Group();
         Parent menu;

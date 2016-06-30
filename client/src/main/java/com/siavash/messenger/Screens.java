@@ -8,9 +8,11 @@ public enum Screens {
     CONTACT_LIST("contact_list_id", "contact_list_layout"),
     CONTACT_MESSAGES("contact_messages_id", "contact_messages_layout"),
     FIRST_PAGE("first_page_id", "first_page_layout"),
+    SIGN_IN("sign_in", "sign_in_layout"),
+    SIGN_UP("sign_up", "sign_up_layout"),
     MENU("menu_id", "menu_layout");
 
-    String id, resource;
+    public String id, resource;
 
     Screens(String id, String resource) {
         this.id = id;

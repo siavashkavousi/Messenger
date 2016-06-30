@@ -15,6 +15,9 @@ public interface RestApi {
     @GET("user")
     Call<User> user(@Query("username") String userName);
 
+    @GET("sign_in")
+    Call<User> signIn(@Query("username") String userName, @Query("password") String password);
+
     @POST("user")
     Call<String> addUser(@Body User user);
 
