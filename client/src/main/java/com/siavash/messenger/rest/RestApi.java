@@ -31,8 +31,12 @@ public interface RestApi {
     @POST("delete_contact")
     Call<Response> deleteContact(@Body Contact contact);
 
-    @GET("contact")
+    @GET("contacts")
     Call<List<Contact>> contacts(@Query("client_username") String clientUserName);
+
+    @GET("find_contact")
+    Call<List<Contact>> findContact(@Query("client_username") String clientUserName,
+                                    @Query("name") String name);
 
     @POST("contact")
     Call<String> addContact(@Body Contact contact);

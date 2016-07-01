@@ -2,11 +2,14 @@ package com.siavash.messenger.controllers;
 
 import com.siavash.messenger.*;
 import com.siavash.messenger.views.ContactView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +28,29 @@ public class FirstPage implements ParentProvider {
     private static Logger log = LoggerFactory.getLogger(FirstPage.class.getSimpleName());
     private ScreenManager parent;
     @FXML
+    private TextField searchField;
+    @FXML
     private ListView<ContactView> messagedContacts;
     @FXML
     private AnchorPane messageArea;
 
     @FXML
     private void initialize() {
+        searchField.setOnKeyPressed(event -> {
+            messagedContacts.getItems().clear();
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                if (!searchField.getText().isEmpty()) {
+                    findSpecificContact(searchField.getText(),
+                            contacts -> Platform.runLater(() -> messagedContacts.setItems(coupleContactsToViews(contacts))));
+                } else {
+                    requestContacts((contacts) -> {
+                        Util.contactViews = coupleContactsToViews(contacts);
+                        Platform.runLater(() -> messagedContacts.setItems(Util.contactViews));
+                    });
+                }
+            }
+        });
+
         requestContacts((contacts) -> {
             Util.contactViews = coupleContactsToViews(contacts);
             messagedContacts.setItems(Util.contactViews);
@@ -77,10 +97,25 @@ public class FirstPage implements ParentProvider {
     }
 
     private ObservableList<ContactView> coupleContactsToViews(List<Contact> contacts) {
-        List<ContactView> contactViews =  contacts.stream()
+        List<ContactView> contactViews = contacts.stream()
                 .map(contact -> new ContactView(new Image("/images/contact.png"), contact))
                 .collect(Collectors.toList());
         return FXCollections.observableArrayList(contactViews);
+    }
+
+    private void findSpecificContact(String name, Consumer<List<Contact>> postResult) {
+        MainApp.restApi.findContact(Util.user.getUserName(), name).enqueue(new Callback<List<Contact>>() {
+            @Override
+            public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
+                List<Contact> contacts = response.body();
+                postResult.accept(contacts);
+            }
+
+            @Override
+            public void onFailure(Call<List<Contact>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
