@@ -13,6 +13,7 @@ import java.util.logging.Logger;
  */
 public class Util {
     public static User user = null;
+    public static List<Contact> contacts = null;
     private static Logger log = Logger.getLogger(Util.class.getSimpleName());
 
     public static InputStream getInputStream(String path) throws FileNotFoundException {

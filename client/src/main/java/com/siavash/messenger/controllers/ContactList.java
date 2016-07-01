@@ -1,46 +1,32 @@
-package com.siavash.messenger;
+package com.siavash.messenger.controllers;
 
+import com.siavash.messenger.*;
 import com.siavash.messenger.views.ContactView;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by sia on 6/29/16.
  */
-public class ContactListView extends VBox {
+public class ContactList implements ParentProvider {
+    private ScreenManager parent;
     @FXML
     private Button createNewContact;
     @FXML
     private ListView<ContactView> contactList;
 
-    public ContactListView(Stage stage) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setRoot(this);
-            loader.setController(this);
+    @FXML
+    private void initialize() {
+        createNewContact.setOnAction(event -> parent.setScreen(Screens.ADD_CONTACT.id));
 
-            loader.load(Util.getInputStream(Constants.CONTACT_LIST_VIEW_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        createNewContact.setOnAction(event -> {
-            if(stage.isShowing())
-                stage.close();
-            stage.setScene(new Scene(new AddContactView()));
-            stage.show();
-        });
+        if (!Util.contacts.isEmpty())
+            addContacts(Util.contacts);
     }
 
     public void addContacts(List<Contact> contacts) {
@@ -51,5 +37,10 @@ public class ContactListView extends VBox {
         return contacts.stream()
                 .map(contact -> new ContactView(new Image("/images/contact.png"), contact))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setParent(ScreenManager screen) {
+        parent = screen;
     }
 }

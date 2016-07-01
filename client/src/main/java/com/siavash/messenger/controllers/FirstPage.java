@@ -87,6 +87,7 @@ public class FirstPage implements ParentProvider {
             @Override
             public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
                 List<Contact> contacts = response.body();
+                Util.contacts = contacts;
                 postResult.accept(contacts);
             }
 

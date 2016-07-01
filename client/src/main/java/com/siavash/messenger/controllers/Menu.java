@@ -1,18 +1,12 @@
 package com.siavash.messenger.controllers;
 
-import com.siavash.messenger.Contact;
-import com.siavash.messenger.ContactListView;
-import com.siavash.messenger.MainApp;
-import javafx.application.Platform;
+import com.siavash.messenger.ScreenManager;
+import com.siavash.messenger.Screens;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import java.util.List;
 
 /**
  * Created by sia on 6/27/16.
@@ -25,33 +19,25 @@ public class Menu {
     @FXML
     private Label about;
 
-    private Stage secondaryStage = new Stage();
-
     @FXML
     private void initialize() {
+        Stage stage = new Stage();
+        ScreenManager manager = new ScreenManager();
+
         settings.setOnMouseClicked(event -> {
 
         });
 
         contacts.setOnMouseClicked(event -> {
-            Call<List<Contact>> request = MainApp.restApi.contacts("sia");
-            request.enqueue(new Callback<List<Contact>>() {
-                @Override
-                public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
-                    Platform.runLater(() -> {
-                        List<Contact> contacts = response.body();
-                        ContactListView view = new ContactListView(secondaryStage);
-                        secondaryStage.setScene(new Scene(view));
-                        secondaryStage.show();
-                        view.addContacts(contacts);
-                    });
-                }
+            manager.loadScreen(Screens.CONTACT_LIST.id, Screens.CONTACT_LIST.resource);
+            manager.loadScreen(Screens.ADD_CONTACT.id, Screens.ADD_CONTACT.resource);
 
-                @Override
-                public void onFailure(Call<List<Contact>> call, Throwable t) {
+            manager.setScreen(Screens.CONTACT_LIST.id);
 
-                }
-            });
+            Group root = new Group();
+            root.getChildren().addAll(manager);
+            stage.setScene(new Scene(root));
+            stage.show();
         });
 
         about.setOnMouseClicked(event -> {
