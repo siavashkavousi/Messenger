@@ -42,9 +42,10 @@ public class SignIn implements ParentProvider {
                     log.info("signIn: onResponse -> " + user.toString());
                     Util.user = user;
                     parent.loadScreen(Screens.FIRST_PAGE.id, Screens.FIRST_PAGE.resource);
+                    parent.loadScreen(Screens.PROFILE.id, Screens.PROFILE.resource);
                     postResult.run();
                 } else {
-                    log.info("signIn: onResponse -> user not found");
+                    log.info("signIn: onResponse -> user not found or password is incorrect");
                     //// FIXME: 6/30/16 not found notification should be shown
                 }
             }

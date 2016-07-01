@@ -36,8 +36,11 @@ public class SignUp implements ParentProvider {
         back.setOnAction(event -> parent.setScreen(Screens.SIGN_IN.id));
 
         //// FIXME: 6/30/16 notification for try again
-        signUp.setOnAction(event ->
-                signUp(() -> parent.setScreen(Screens.FIRST_PAGE.id), () -> log.info("try again!!!")));
+        signUp.setOnAction(event -> {
+            Util.checkIfUserExists(userName.getText(),
+                    () -> log.info("user exists!"),
+                    () -> signUp(() -> parent.setScreen(Screens.FIRST_PAGE.id), () -> log.info("try again!!!")));
+        });
     }
 
     private void signUp(Runnable postResultSuccess, Runnable postResultFailure) {
