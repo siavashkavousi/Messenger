@@ -10,8 +10,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.IOException;
-
 /**
  * Created by sia on 6/30/16.
  */
@@ -49,7 +47,7 @@ public class SignUp implements ParentProvider {
             @Override
             public void onResponse(Call<com.siavash.messenger.Response> call, Response<com.siavash.messenger.Response> response) {
                 log.info("signUp: onResponse -> response status code: " + response.code());
-                if(!Util.checkResponseMessage(response))
+                if (!Util.checkResponseMessage(response))
                     return;
 
                 com.siavash.messenger.Response message = response.body();
@@ -57,6 +55,7 @@ public class SignUp implements ParentProvider {
                     log.info("signUp: onResponse -> success: " + message);
                     Util.user = user;
                     parent.loadScreen(Screens.FIRST_PAGE.id, Screens.FIRST_PAGE.resource);
+                    parent.loadScreen(Screens.PROFILE.id, Screens.PROFILE.resource);
                     postResultSuccess.run();
                 } else {
                     log.info("signUp: onResponse -> failure: " + message);

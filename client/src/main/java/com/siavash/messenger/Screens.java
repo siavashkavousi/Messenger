@@ -12,6 +12,7 @@ public enum Screens {
     CONTACT_MESSAGES("contact_messages_id", "layout_contact_messages"),
     MENU("menu_id", "layout_menu"),
     PROFILE("profile_id", "layout_profile"),
+    EDIT_PROFILE("edit_profile_id", "layout_edit_profile"),
     CONTACT_PROFILE("contact_profile_id", "layout_contact_profile");
 
     public String id, resource;

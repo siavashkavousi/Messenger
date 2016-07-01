@@ -25,6 +25,9 @@ public interface RestApi {
     @POST("sign_up")
     Call<Response> signUp(@Body User user);
 
+    @POST("update_user")
+    Call<Response> updateUser(@Body User user);
+
     @GET("contact")
     Call<List<Contact>> contacts(@Query("client_username") String clientUserName);
 

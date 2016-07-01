@@ -1,5 +1,6 @@
 package com.siavash.messenger.controllers;
 
+import com.siavash.messenger.ParentProvider;
 import com.siavash.messenger.ScreenManager;
 import com.siavash.messenger.Screens;
 import javafx.fxml.FXML;
@@ -11,7 +12,8 @@ import javafx.stage.Stage;
 /**
  * Created by sia on 6/27/16.
  */
-public class Menu {
+public class Menu implements ParentProvider {
+    private ScreenManager parent;
     @FXML
     private Label settings;
     @FXML
@@ -24,9 +26,7 @@ public class Menu {
         Stage stage = new Stage();
         ScreenManager manager = new ScreenManager();
 
-        settings.setOnMouseClicked(event -> {
-
-        });
+        settings.setOnMouseClicked(event -> parent.setScreen(Screens.PROFILE.id));
 
         contacts.setOnMouseClicked(event -> {
             manager.loadScreen(Screens.CONTACT_LIST.id, Screens.CONTACT_LIST.resource);
@@ -43,5 +43,10 @@ public class Menu {
         about.setOnMouseClicked(event -> {
 
         });
+    }
+
+    @Override
+    public void setParent(ScreenManager screen) {
+        parent = screen;
     }
 }
