@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.siavash.messenger.controllers.ContactProfile">
+    <center>
+        <VBox maxHeight="210" maxWidth="310" prefHeight="210.0" prefWidth="310.0" BorderPane.alignment="CENTER">
+            <children>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="210.0" prefWidth="210.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints />
+                  <RowConstraints />
+                    </rowConstraints>
+                    <children>
+                        <Label text="User Name" />
+                        <Label text="First Name" GridPane.rowIndex="2" />
+                        <Label text="Last Name" GridPane.rowIndex="4" />
+                        <Label fx:id="userName" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <Label fx:id="firstName" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="lastName" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    </children>
+                </GridPane>
+                <SplitPane maxHeight="20.0" prefHeight="20.0" prefWidth="240.0" />
+                <HBox prefWidth="200.0">
+                    <children>
+                        <!--<Button fx:id="back" mnemonicParsing="false" prefWidth="80.0" text="Back" />-->
+                        <SplitPane prefHeight="20.0" prefWidth="150.0" />
+                        <Button fx:id="sendMessage" mnemonicParsing="false" prefWidth="160.0" text="Send Message" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

@@ -4,6 +4,8 @@ import com.siavash.messenger.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
  */
 public class ContactMessages implements ParentProvider, ModelProvider {
     private static Logger log = LoggerFactory.getLogger(ContactMessages.class.getSimpleName());
+    private ScreenManager parent;
     @FXML
     private HBox profile;
     @FXML
@@ -32,6 +35,8 @@ public class ContactMessages implements ParentProvider, ModelProvider {
     private VBox clientMessages;
     @FXML
     private VBox contactMessages;
+    @FXML
+    private TextField messageField;
 
     private ContactMessagesModel model;
 
@@ -47,34 +52,47 @@ public class ContactMessages implements ParentProvider, ModelProvider {
         requestMessages(model.getContactUserName(),
                 model.getClientUserName(),
                 this::addContactMessages);
+
+        messageField.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER) && !messageField.getText().isEmpty()) {
+                List<String> contacts = new ArrayList<>();
+                contacts.add(model.getContactUserName());
+
+                Message content = new Message(Util.user.getUserName(), messageField.getText(), contacts);
+                sendMessage(content, () -> addClientMessage(messageField.getText()));
+                messageField.clear();
+            }
+        });
+
+        profile.setOnMouseClicked(event -> {
+            ProfileModel model = ProfileModel.newProfileModel()
+                    .userName(this.model.getContactUserName())
+                    .build();
+            parent.loadScreen(Screens.CONTACT_PROFILE.id, Screens.CONTACT_PROFILE.resource, model);
+            parent.setScreen(Screens.CONTACT_PROFILE.id);
+        });
     }
 
-    public void setProfileEvent(Runnable e) {
-        profile.setOnMouseClicked(event -> e.run());
-    }
-
-    public void setContactFirstName(String firstName) {
+    private void setContactFirstName(String firstName) {
         contactFirstName.setText(firstName);
     }
 
-    public void setContactLastName(String lastName) {
+    private void setContactLastName(String lastName) {
         contactLastName.setText(lastName);
     }
 
-    public void addClientMessage(Message message) {
-        List<Message> messages = new ArrayList<>();
-        messages.add(message);
-        clientMessages.getChildren().addAll(coupleMessagesToLabels(messages));
+    private void addClientMessage(String message) {
+        clientMessages.getChildren().addAll(new Label(message));
         contactMessages.getChildren().addAll(getEmptyLabel(1));
     }
 
-    public void addClientMessages(List<Message> messages) {
+    private void addClientMessages(List<Message> messages) {
         int size = messages.size();
         clientMessages.getChildren().addAll(coupleMessagesToLabels(messages));
         contactMessages.getChildren().addAll(getEmptyLabel(size));
     }
 
-    public void addContactMessages(List<Message> messages) {
+    private void addContactMessages(List<Message> messages) {
         int size = messages.size();
         contactMessages.getChildren().addAll(coupleMessagesToLabels(messages));
         clientMessages.getChildren().addAll(getEmptyLabel(size));
@@ -108,6 +126,29 @@ public class ContactMessages implements ParentProvider, ModelProvider {
         });
     }
 
+    private void sendMessage(Message message, Runnable postResult) {
+        MainApp.restApi.addMessage(message).enqueue(new Callback<com.siavash.messenger.Response>() {
+            @Override
+            public void onResponse(Call<com.siavash.messenger.Response> call, Response<com.siavash.messenger.Response> response) {
+                log.info("sendMessage: onResponse -> response status code: " + response.code());
+                if (!Util.checkResponseMessage(response))
+                    return;
+
+                com.siavash.messenger.Response message = response.body();
+                if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {
+                    log.info("sendMessage: onResponse -> success: " + message);
+                    Platform.runLater(postResult);
+                } else {
+                    log.info("sendMessage: onResponse -> failure: " + message);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.siavash.messenger.Response> call, Throwable t) {
+            }
+        });
+    }
+
     @Override
     public void provideModel(Object model) {
         this.model = (ContactMessagesModel) model;
@@ -116,6 +157,6 @@ public class ContactMessages implements ParentProvider, ModelProvider {
 
     @Override
     public void setParent(ScreenManager screen) {
-
+        parent = screen;
     }
 }

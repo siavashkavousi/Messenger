@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0"
       prefWidth="800.0" stylesheets="/styles/first_page_styles.css" xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.siavash.messenger.controllers.FirstPage">
     <children>
         <ListView fx:id="messagedContacts" prefWidth="260.0"/>
-        <VBox prefHeight="570.0" prefWidth="540.0">
-            <children>
-                <AnchorPane fx:id="messageArea" styleClass="anchor-pane" prefHeight="540.0"/>
-                <TextField fx:id="message" prefHeight="30.0"/>
-            </children>
-        </VBox>
+        <AnchorPane fx:id="messageArea" styleClass="anchor-pane" prefWidth="540"/>
     </children>
 </HBox>

@@ -10,7 +10,9 @@ public enum Screens {
     SIGN_IN("sign_in", "layout_sign_in"),
     SIGN_UP("sign_up", "layout_sign_up"),
     CONTACT_MESSAGES("contact_messages_id", "layout_contact_messages"),
-    MENU("menu_id", "layout_menu");
+    MENU("menu_id", "layout_menu"),
+    PROFILE("profile_id", "layout_profile"),
+    CONTACT_PROFILE("contact_profile_id", "layout_contact_profile");
 
     public String id, resource;
 
