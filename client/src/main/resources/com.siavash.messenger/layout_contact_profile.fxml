@@ -34,9 +34,14 @@
                 <SplitPane maxHeight="20.0" prefHeight="20.0" prefWidth="240.0"/>
                 <HBox prefWidth="200.0">
                     <children>
-                        <Button fx:id="unFriend" mnemonicParsing="false" prefWidth="160.0" text="UnFriend"/>
-                        <SplitPane prefHeight="20.0" prefWidth="150.0"/>
+                        <Button fx:id="unFriend" mnemonicParsing="false" prefWidth="170.0" text="UnFriend"/>
+                        <SplitPane prefHeight="20.0" prefWidth="140.0"/>
                         <Button fx:id="sendMessage" mnemonicParsing="false" prefWidth="170.0" text="Send Message"/>
+                    </children>
+                </HBox>
+                <HBox prefWidth="200.0">
+                    <children>
+                        <Button fx:id="report" mnemonicParsing="false" prefWidth="310.0" text="report"/>
                     </children>
                 </HBox>
             </children>

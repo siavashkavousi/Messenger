@@ -27,6 +27,8 @@ public class ContactProfile implements ParentProvider, ModelProvider {
     private Button unFriend;
     @FXML
     private Button sendMessage;
+    @FXML
+    private Button report;
 
     private ProfileModel model;
 
@@ -41,6 +43,8 @@ public class ContactProfile implements ParentProvider, ModelProvider {
             sendMessage.setOnAction(event -> parent.setScreen(Screens.CONTACT_MESSAGES.id));
 
             unFriend.setOnAction(event -> deleteContact(contact));
+
+            report.setOnAction(event -> reportUser(contactUserName));
         }
     }
 
@@ -68,6 +72,30 @@ public class ContactProfile implements ParentProvider, ModelProvider {
             @Override
             public void onFailure(Call<Response> call, Throwable t) {
                 log.info("deleteContact: onFailure -> something happened!");
+            }
+        });
+    }
+
+    private void reportUser(String userName) {
+        MainApp.restApi.reportUser(new Request(userName)).enqueue(new Callback<Response>() {
+            @Override
+            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                log.info("reportUser: onResponse -> response status code: " + response.code());
+                if (!Util.checkResponseMessage(response))
+                    return;
+
+                com.siavash.messenger.Response message = response.body();
+                if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {
+                    log.info("reportUser: onResponse -> success: " + message);
+                    //// FIXME: 7/2/16 notification needed
+                } else {
+                    log.info("reportUser: onResponse -> failure: " + message);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Response> call, Throwable t) {
+                log.info("reportUser: onFailure -> something happened!");
             }
         });
     }

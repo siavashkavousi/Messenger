@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 public class Updates {
     private static final Logger log = LoggerFactory.getLogger(Updates.class);
     private MongoDatabase db = Util.getDatabase();
+    private MongoCollection<Document> userCollection = db.getCollection(Constants.USER);
 
     private Updates() {
     }
@@ -24,15 +25,24 @@ public class Updates {
                            String newFirstName, String newLastName, String newPhoneNumber) {
         Document doc = new Document("_id", userName);
 
-        log.info("pass: " + newPassword);
         Document newDoc = new Document("$set", new Document("password", newPassword)
                 .append("firstName", newFirstName)
                 .append("lastName", newLastName)
                 .append("phoneNumber", newPhoneNumber));
 
-        MongoCollection<Document> userCollection = db.getCollection(Constants.USER);
         userCollection.updateOne(doc, newDoc, (result, t) -> {
             log.info("db update: updateUser -> modified documents: #" + result.getModifiedCount());
+            Util.logUpdateSuccess(Constants.USER);
+        });
+    }
+
+    public void incrementUserReports(String userName) {
+        Document doc = new Document("_id", userName);
+
+        Document newDoc = new Document("$inc", new Document("num_of_reports", 1));
+
+        userCollection.updateOne(doc, newDoc, (result, t) -> {
+            log.info("db update: incrementUserReports -> modified documents: #" + result.getModifiedCount());
             Util.logUpdateSuccess(Constants.USER);
         });
     }

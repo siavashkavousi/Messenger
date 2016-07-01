@@ -21,7 +21,8 @@ public final class Insertions {
     }
 
     public void insertUser(String userName, String password,
-                           String firstName, String lastName, String phoneNumber) {
+                           String firstName, String lastName,
+                           String phoneNumber) {
         Document doc = new Document("_id", userName)
                 .append("password", password)
                 .append("firstName", firstName)

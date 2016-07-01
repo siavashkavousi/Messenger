@@ -101,6 +101,18 @@ public class HttpPostHandler {
                 Util.sendResponseMessage(httpExchange, response);
                 break;
             }
+            case "/report_user": {
+                log.info("POST request with /report_user url and username as parameter");
+
+                String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
+                Request request = gson.fromJson(requestBody, Request.class);
+
+                MainApp.updates.incrementUserReports(request.getMessage());
+
+                String response = gson.toJson(new Response("200", Constants.HTTP_ACCEPTED));
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
         }
     }
 }

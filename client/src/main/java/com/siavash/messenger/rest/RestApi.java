@@ -1,14 +1,8 @@
 package com.siavash.messenger.rest;
 
-import com.siavash.messenger.Contact;
-import com.siavash.messenger.Message;
-import com.siavash.messenger.Response;
-import com.siavash.messenger.User;
+import com.siavash.messenger.*;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 
 import java.util.List;
 
@@ -47,4 +41,7 @@ public interface RestApi {
 
     @POST("msg")
     Call<Response> addMessage(@Body Message message);
+
+    @POST("report_user")
+    Call<Response> reportUser(@Body Request request);
 }
