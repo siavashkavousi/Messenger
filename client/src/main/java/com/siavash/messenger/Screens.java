@@ -9,6 +9,7 @@ public enum Screens {
     FIRST_PAGE("first_page_id", "layout_first_page"),
     SIGN_IN("sign_in", "layout_sign_in"),
     SIGN_UP("sign_up", "layout_sign_up"),
+    CONTACT_MESSAGES("contact_messages_id", "layout_contact_messages"),
     MENU("menu_id", "layout_menu");
 
     public String id, resource;

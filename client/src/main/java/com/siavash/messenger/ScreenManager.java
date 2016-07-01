@@ -42,6 +42,20 @@ public class ScreenManager extends StackPane {
         }
     }
 
+    public void loadScreen(String name, String resource, Object model) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            Parent layout = Util.loadFxmlObject(loader, Util.getAbsolutePath(resource));
+            ParentProvider provider1 = loader.getController();
+            provider1.setParent(this);
+            ModelProvider provider2 = loader.getController();
+            provider2.provideModel(model);
+            addScreen(name, layout);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setScreen(String name) {
         if (screens.get(name) != null) {
             DoubleProperty opacity = opacityProperty();

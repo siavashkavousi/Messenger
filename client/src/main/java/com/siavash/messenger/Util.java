@@ -12,7 +12,8 @@ import java.util.logging.Logger;
  * Created by sia on 6/26/16.
  */
 public class Util {
-    public static User user = null;
+//    public static User user = null;
+    public static User user = new User("sia", "123456", "siavash", "kavousi", "12");
     public static List<Contact> contacts = null;
     private static Logger log = Logger.getLogger(Util.class.getSimpleName());
 
