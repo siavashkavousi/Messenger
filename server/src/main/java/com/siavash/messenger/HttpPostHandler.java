@@ -85,6 +85,22 @@ public class HttpPostHandler {
                 Util.sendResponseMessage(httpExchange, response);
                 break;
             }
+            case "/delete_contact": {
+                log.info("POST request with /delete_contact url and contact data as parameter");
+
+                String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
+                Contact contact = gson.fromJson(requestBody, Contact.class);
+
+                MainApp.removals.removeContact(
+                        contact.getClientUserName(),
+                        contact.getContactUserName(),
+                        contact.getFirstName(),
+                        contact.getLastName());
+
+                String response = gson.toJson(new Response("200", Constants.HTTP_ACCEPTED));
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
         }
     }
 }

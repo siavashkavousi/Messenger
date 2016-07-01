@@ -12,6 +12,7 @@ public class MainApp {
     public static Queries queries = Queries.newInstance();
     public static Insertions insertions = Insertions.newInstance();
     public static Updates updates = Updates.newInstance();
+    public static Removals removals = Removals.newInstance();
 
     public static void main(String[] args) throws IOException {
         CustomHttpHandler httpHandler = new CustomHttpHandler();
@@ -20,6 +21,7 @@ public class MainApp {
         server.createContext("/sign_up", httpHandler);
         server.createContext("/user", httpHandler);
         server.createContext("/update_user", httpHandler);
+        server.createContext("/delete_contact", httpHandler);
         server.createContext("/msg", httpHandler);
         server.createContext("/contact", httpHandler);
         server.setExecutor(null);

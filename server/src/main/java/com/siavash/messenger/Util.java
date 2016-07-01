@@ -95,4 +95,8 @@ class Util {
     static void logUpdateSuccess(String collectionName) {
         log.info("Updating " + collectionName + " has been completed successfully");
     }
+
+    static void logRemovalSuccess(String collectionName) {
+        log.info("Removing from " + collectionName + " has been completed successfully");
+    }
 }
