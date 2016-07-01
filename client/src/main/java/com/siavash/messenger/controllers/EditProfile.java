@@ -71,7 +71,6 @@ public class EditProfile implements ParentProvider {
                 if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {
                     log.info("updateUser: onResponse -> success: " + message);
                     Util.user = user;
-                    parent.loadScreen(Screens.FIRST_PAGE.id, Screens.FIRST_PAGE.resource);
                     parent.loadScreen(Screens.PROFILE.id, Screens.PROFILE.resource);
                     postResult.run();
                 } else {

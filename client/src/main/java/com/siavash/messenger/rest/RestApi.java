@@ -28,6 +28,9 @@ public interface RestApi {
     @POST("update_user")
     Call<Response> updateUser(@Body User user);
 
+    @POST("delete_contact")
+    Call<Response> deleteContact(@Body Contact contact);
+
     @GET("contact")
     Call<List<Contact>> contacts(@Query("client_username") String clientUserName);
 

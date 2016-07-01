@@ -45,6 +45,7 @@ public class Profile implements ParentProvider {
 
         edit.setOnAction(event -> {
             parent.loadScreen(Screens.EDIT_PROFILE.id, Screens.EDIT_PROFILE.resource);
+            parent.unloadScreen(Screens.PROFILE.id);
             parent.setScreen(Screens.EDIT_PROFILE.id);
         });
 

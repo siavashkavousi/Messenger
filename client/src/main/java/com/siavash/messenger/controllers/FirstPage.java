@@ -2,6 +2,8 @@ package com.siavash.messenger.controllers;
 
 import com.siavash.messenger.*;
 import com.siavash.messenger.views.ContactView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -29,8 +31,10 @@ public class FirstPage implements ParentProvider {
 
     @FXML
     private void initialize() {
-        requestContacts(contacts ->
-                Util.addItemListToListView(messagedContacts, coupleContactsToViews(contacts)));
+        requestContacts((contacts) -> {
+            Util.contactViews = coupleContactsToViews(contacts);
+            messagedContacts.setItems(Util.contactViews);
+        });
 
         messagedContacts.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, contactView) -> {
@@ -62,7 +66,6 @@ public class FirstPage implements ParentProvider {
             @Override
             public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
                 List<Contact> contacts = response.body();
-                Util.contacts = contacts;
                 postResult.accept(contacts);
             }
 
@@ -73,10 +76,11 @@ public class FirstPage implements ParentProvider {
 
     }
 
-    private List<ContactView> coupleContactsToViews(List<Contact> contacts) {
-        return contacts.stream()
+    private ObservableList<ContactView> coupleContactsToViews(List<Contact> contacts) {
+        List<ContactView> contactViews =  contacts.stream()
                 .map(contact -> new ContactView(new Image("/images/contact.png"), contact))
                 .collect(Collectors.toList());
+        return FXCollections.observableArrayList(contactViews);
     }
 
     @Override
