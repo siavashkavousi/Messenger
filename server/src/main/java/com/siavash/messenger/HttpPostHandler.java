@@ -63,7 +63,26 @@ public class HttpPostHandler {
                         contact.getContactUserName(),
                         contact.getFirstName(),
                         contact.getLastName());
-                Util.sendResponseMessage(httpExchange, Constants.HTTP_ACCEPTED);
+
+                String response = gson.toJson(new Response("200", Constants.HTTP_ACCEPTED));
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/update_user": {
+                log.info("POST request with /update_user url and user data as parameter");
+
+                String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
+                User user = gson.fromJson(requestBody, User.class);
+
+                MainApp.updates.updateUser(
+                        user.getUserName(),
+                        user.getPassword(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getPhoneNumber());
+
+                String response = gson.toJson(new Response("200", Constants.HTTP_ACCEPTED));
+                Util.sendResponseMessage(httpExchange, response);
                 break;
             }
         }

@@ -91,4 +91,8 @@ class Util {
     static void logInsertionSuccess(String collectionName) {
         log.info("Insertion into " + collectionName + " completed successfully");
     }
+
+    static void logUpdateSuccess(String collectionName) {
+        log.info("Updating " + collectionName + " has been completed successfully");
+    }
 }
