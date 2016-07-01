@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by sia on 6/25/16.
@@ -55,6 +57,35 @@ public class Queries {
                         futureUser.complete(null);
                 });
         return futureUser;
+    }
+
+    private CompletableFuture<List<Contact>> findContactWithName(Document document) {
+        CompletableFuture<List<Contact>> futureContacts = new CompletableFuture<>();
+        contactsCollection.find(document).into(new ArrayList<>(),
+                (result, t) -> {
+                    log.info("db query: findContactWithName -> found documents: #" + result.size());
+                    List<Contact> contacts = convertDocumentsToContacts(result);
+                    futureContacts.complete(contacts);
+                });
+        return futureContacts;
+    }
+
+    public CompletableFuture<List<Contact>> findContactWithName(String clientUserName,
+                                                                String name) throws ExecutionException, InterruptedException {
+        Document doc = new Document("clientUserName", clientUserName)
+                .append("firstName", name);
+        CompletableFuture<List<Contact>> f1 = findContactWithName(doc);
+
+        doc = new Document("clientUserName", clientUserName)
+                .append("lastName", name);
+        CompletableFuture<List<Contact>> f2 = findContactWithName(doc);
+
+        CompletableFuture<List<Contact>> futureContacts = new CompletableFuture<>();
+        List<Contact> l1 = f1.get();
+        List<Contact> l2 = f2.get();
+        futureContacts.complete(Stream.concat(l1.stream(), l2.stream()).collect(Collectors.toList()));
+
+        return futureContacts;
     }
 
     public CompletableFuture<List<Contact>> findContacts(String clientUserName) {

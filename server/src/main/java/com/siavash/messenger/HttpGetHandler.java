@@ -53,7 +53,7 @@ public class HttpGetHandler {
                 Util.sendResponseMessage(httpExchange, response);
                 break;
             }
-            case "/contact": {
+            case "/contacts": {
                 log.info("GET request with /contact url and client_username as parameters");
 
                 Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
@@ -74,11 +74,26 @@ public class HttpGetHandler {
                 String userName = queryMap.get("username");
                 String password = queryMap.get("password");
 
-                CompletableFuture<User> futureContacts = MainApp.queries
+                CompletableFuture<User> futureUser = MainApp.queries
                         .signInUser(userName, password);
-                User user = futureContacts.get();
+                User user = futureUser.get();
 
                 String response = gson.toJson(user);
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/find_contact": {
+                log.info("GET request with /find_contact url and client username and name as parameters");
+
+                Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+                String userName = queryMap.get("client_username");
+                String name = queryMap.get("name");
+
+                CompletableFuture<List<Contact>> futureContacts = MainApp.queries
+                        .findContactWithName(userName, name);
+                List<Contact> contacts = futureContacts.get();
+
+                String response = gson.toJson(contacts);
                 Util.sendResponseMessage(httpExchange, response);
                 break;
             }

@@ -23,7 +23,9 @@ public class MainApp {
         server.createContext("/update_user", httpHandler);
         server.createContext("/delete_contact", httpHandler);
         server.createContext("/msg", httpHandler);
+        server.createContext("/contacts", httpHandler);
         server.createContext("/contact", httpHandler);
+        server.createContext("/find_contact", httpHandler);
         server.setExecutor(null);
         server.start();
         System.out.println("waiting for request");
