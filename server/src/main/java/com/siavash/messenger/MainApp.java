@@ -26,7 +26,13 @@ public class MainApp {
         server.createContext("/contacts", httpHandler);
         server.createContext("/contact", httpHandler);
         server.createContext("/find_contact", httpHandler);
+        server.createContext("/find_contacts", httpHandler);
         server.createContext("/report_user", httpHandler);
+
+        server.createContext("/groups", httpHandler);
+        server.createContext("/create_group", httpHandler);
+        server.createContext("/group_messages", httpHandler);
+        server.createContext("/group_members", httpHandler);
         server.setExecutor(null);
         server.start();
         System.out.println("waiting for request");

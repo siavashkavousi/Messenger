@@ -5,14 +5,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0"
       prefWidth="800.0" stylesheets="/styles/first_page_styles.css" xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.siavash.messenger.controllers.FirstPage">
     <children>
         <VBox prefWidth="260.0" prefHeight="570.0">
             <children>
-                <TextField fx:id="searchField" prefHeight="20.0" promptText="Search"/>
-                <ListView fx:id="messagedContacts" prefHeight="550.0"/>
+                <HBox prefHeight="20">
+                    <TextField fx:id="searchField" prefWidth="180.0" promptText="Search"/>
+                    <Button fx:id="createGroup" prefWidth="40" text="CG"/>
+                    <Button fx:id="createChannel" prefWidth="40" text="CC"/>
+                </HBox>
+                <ListView fx:id="itemList" prefHeight="550.0"/>
             </children>
         </VBox>
         <AnchorPane fx:id="messageArea" styleClass="anchor-pane" prefWidth="540"/>

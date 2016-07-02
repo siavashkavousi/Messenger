@@ -113,6 +113,35 @@ public class HttpPostHandler {
                 Util.sendResponseMessage(httpExchange, response);
                 break;
             }
+            case "/create_group": {
+                log.info("POST request with /create_group url and group data as parameter");
+
+                String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
+                Group group = gson.fromJson(requestBody, Group.class);
+
+                MainApp.insertions.insertGroup(
+                        group.getGroupId(),
+                        group.getCreatorId(),
+                        group.getName());
+
+                String response = gson.toJson(new Response("200", Constants.HTTP_ACCEPTED));
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/group_members": {
+                log.info("POST request with /group_member url and users data as parameter");
+
+                String requestBody = Util.readFromInputStream(httpExchange.getRequestBody());
+                GroupMembers members = gson.fromJson(requestBody, GroupMembers.class);
+
+                MainApp.updates.insertGroupMember(
+                        members.getGroupId(),
+                        members.getMembersUserName());
+
+                String response = gson.toJson(new Response("200", Constants.HTTP_ACCEPTED));
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
         }
     }
 }

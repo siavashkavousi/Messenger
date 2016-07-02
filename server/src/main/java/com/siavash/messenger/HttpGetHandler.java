@@ -82,8 +82,8 @@ public class HttpGetHandler {
                 Util.sendResponseMessage(httpExchange, response);
                 break;
             }
-            case "/find_contact": {
-                log.info("GET request with /find_contact url and client username and name as parameters");
+            case "/find_contacts": {
+                log.info("GET request with /find_contacts url and client username and name as parameters");
 
                 Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
                 String userName = queryMap.get("client_username");
@@ -94,6 +94,54 @@ public class HttpGetHandler {
                 List<Contact> contacts = futureContacts.get();
 
                 String response = gson.toJson(contacts);
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/find_contact": {
+                log.info("GET request with /find_contact url and client and contact username as parameters");
+
+                Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+                String userName = queryMap.get("client_username");
+                String contactUsername = queryMap.get("contact_username");
+
+                CompletableFuture<Contact> futureContacts = MainApp.queries
+                        .findContact(userName, contactUsername);
+                Contact contact = futureContacts.get();
+
+                String response = gson.toJson(contact);
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/group_messages": {
+                log.info("GET request with /msg_group url and client_username and group_id and except_client as parameters");
+
+                Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+                String userName = queryMap.get("client_username");
+                String groupId = queryMap.get("group_id");
+                boolean exceptClient = Boolean.parseBoolean(queryMap.get("except_client"));
+
+                CompletableFuture<List<Message>> futureMessages = MainApp.queries
+                        .findGroupMessages(
+                                userName,
+                                groupId,
+                                exceptClient);
+                List<Message> messages = futureMessages.get();
+
+                String response = gson.toJson(messages);
+                Util.sendResponseMessage(httpExchange, response);
+                break;
+            }
+            case "/groups": {
+                log.info("GET request with /groups url and client_username as parameters");
+
+                Map<String, String> queryMap = Util.queryToMap(httpExchange.getRequestURI().getQuery());
+                String userName = queryMap.get("client_username");
+
+                CompletableFuture<List<Group>> futureMessages = MainApp.queries
+                        .findGroups(userName);
+                List<Group> groups = futureMessages.get();
+
+                String response = gson.toJson(groups);
                 Util.sendResponseMessage(httpExchange, response);
                 break;
             }

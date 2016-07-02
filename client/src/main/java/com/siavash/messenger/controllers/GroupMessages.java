@@ -20,86 +20,95 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * Created by sia on 6/27/16.
+ * Created by sia on 7/2/16.
  */
-public class ContactMessages implements ParentProvider {
-    private static Logger log = LoggerFactory.getLogger(ContactMessages.class.getSimpleName());
+public class GroupMessages implements ParentProvider {
+    private static Logger log = LoggerFactory.getLogger(GroupMessages.class.getSimpleName());
     private ScreenManager parent;
     @FXML
-    private HBox profile;
+    private HBox groupProfile;
     @FXML
-    private Label contactFirstName;
+    private Label groupId;
     @FXML
-    private Label contactLastName;
+    private Label groupName;
     @FXML
     private VBox clientMessages;
     @FXML
-    private VBox contactMessages;
+    private VBox contactsMessages;
     @FXML
     private TextField messageField;
 
+    private GroupMembers groupMembers = null;
+
     @FXML
-    private void initialize(){
+    private void initialize() {
         setUp();
     }
 
     private void setUp() {
-        String userName = Util.currentItemView.getItemId();
+        String groupId = Util.currentItemView.getItemId();
+        String name = Util.currentItemView.getName();
 
-        requestContactInfo(userName, contact -> {
-            setContactFirstName(contact.getFirstName());
-            setContactLastName(contact.getLastName());
-            Util.currentContact = contact;
-        });
+        setGroupId(groupId);
+        setGroupName(name);
 
-        // Request messages from user to his/her contact
-        requestMessages(Util.user.getUserName(),
-                userName,
-                this::addClientMessages);
-        // Request messages from his/her contact to user
-        requestMessages(userName,
+        requestMessages(
                 Util.user.getUserName(),
+                groupId,
+                false,
+                this::addClientMessages);
+
+        requestMessages(
+                Util.user.getUserName(),
+                groupId,
+                true,
                 this::addContactMessages);
+
+        requestGroupMembers(
+                groupId,
+                members -> groupMembers = members);
 
         messageField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER) && !messageField.getText().isEmpty()) {
-                List<String> contacts = new ArrayList<>();
-                contacts.add(userName);
+                if (groupMembers == null)
+                    return;
 
-                Message content = new Message(Util.user.getUserName(), messageField.getText(), contacts);
+                Message content = new Message(Util.user.getUserName(),
+                        messageField.getText(),
+                        groupMembers.getMembersUserName());
                 sendMessage(content, () -> addClientMessage(messageField.getText()));
                 messageField.clear();
             }
         });
 
-        profile.setOnMouseClicked(event -> {
-            parent.loadScreen(Screens.GROUP_PROFILE.id, Screens.GROUP_PROFILE.resource);
-            parent.setScreen(Screens.GROUP_PROFILE.id);
+        groupProfile.setOnMouseClicked(event -> {
+            parent.loadScreen(Screens.CONTACT_PROFILE.id, Screens.CONTACT_PROFILE.resource);
+            parent.setScreen(Screens.CONTACT_PROFILE.id);
         });
     }
 
-    private void setContactFirstName(String firstName) {
-        contactFirstName.setText(firstName);
+    private void setGroupId(String groupId) {
+        this.groupId.setText(groupId);
     }
 
-    private void setContactLastName(String lastName) {
-        contactLastName.setText(lastName);
+    private void setGroupName(String groupName) {
+        this.groupName.setText(groupName);
     }
 
     private void addClientMessage(String message) {
         clientMessages.getChildren().addAll(new Label(message));
-        contactMessages.getChildren().addAll(getEmptyLabel(1));
+        contactsMessages.getChildren().addAll(getEmptyLabel(1));
     }
 
     private void addClientMessages(List<Message> messages) {
         int size = messages.size();
         clientMessages.getChildren().addAll(coupleMessagesToLabels(messages));
-        contactMessages.getChildren().addAll(getEmptyLabel(size));
+        contactsMessages.getChildren().addAll(getEmptyLabel(size));
     }
 
     private void addContactMessages(List<Message> messages) {
         int size = messages.size();
-        contactMessages.getChildren().addAll(coupleMessagesToLabels(messages));
+        contactsMessages.getChildren().addAll(coupleMessagesToLabels(messages));
         clientMessages.getChildren().addAll(getEmptyLabel(size));
     }
 
@@ -115,24 +124,11 @@ public class ContactMessages implements ParentProvider {
         return list;
     }
 
-    private void requestContactInfo(String userName, Consumer<Contact> postResult) {
-        Call<Contact> request = MainApp.restApi.findContact(Util.user.getUserName(), userName);
-        request.enqueue(new Callback<Contact>() {
-            @Override
-            public void onResponse(Call<Contact> call, Response<Contact> response) {
-                Contact contact = response.body();
-                postResult.accept(contact);
-            }
-
-            @Override
-            public void onFailure(Call<Contact> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void requestMessages(String senderUserName, String receiverUserName, Consumer<List<Message>> postResult) {
-        Call<List<Message>> request = MainApp.restApi.message(senderUserName, receiverUserName);
+    private void requestMessages(String senderUserName,
+                                 String groupId,
+                                 boolean exceptSender,
+                                 Consumer<List<Message>> postResult) {
+        Call<List<Message>> request = MainApp.restApi.groupMessages(senderUserName, groupId, exceptSender);
         request.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
@@ -142,6 +138,24 @@ public class ContactMessages implements ParentProvider {
 
             @Override
             public void onFailure(Call<List<Message>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void requestGroupMembers(String groupId, Consumer<GroupMembers> postResult) {
+        Call<GroupMembers> request = MainApp.restApi.groupMembers(groupId);
+        request.enqueue(new Callback<GroupMembers>() {
+            @Override
+            public void onResponse(Call<GroupMembers> call, Response<GroupMembers> response) {
+                GroupMembers members = response.body();
+                if (members != null) {
+                    postResult.accept(members);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GroupMembers> call, Throwable t) {
 
             }
         });
@@ -166,6 +180,7 @@ public class ContactMessages implements ParentProvider {
 
             @Override
             public void onFailure(Call<com.siavash.messenger.Response> call, Throwable t) {
+
             }
         });
     }

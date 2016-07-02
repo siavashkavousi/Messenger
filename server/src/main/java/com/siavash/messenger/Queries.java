@@ -22,6 +22,7 @@ public class Queries {
     private MongoCollection<Document> userCollection = db.getCollection(Constants.USER);
     private MongoCollection<Document> contactsCollection = db.getCollection(Constants.CONTACTS);
     private MongoCollection<Document> messageCollection = db.getCollection(Constants.MESSAGE);
+    private MongoCollection<Document> groupCollection = db.getCollection(Constants.GROUP);
 
     private Queries() {
     }
@@ -88,6 +89,19 @@ public class Queries {
         return futureContacts;
     }
 
+    public CompletableFuture<Contact> findContact(String clientUserName,
+                                                  String contactUserName) {
+        CompletableFuture<Contact> futureContacts = new CompletableFuture<>();
+        contactsCollection.find(new Document("clientUserName", clientUserName)
+                .append("contactUserName", contactUserName)).into(new ArrayList<>(),
+                (result, t) -> {
+                    log.info("db query: findContact -> found documents: #" + result.size());
+                    List<Contact> contacts = convertDocumentsToContacts(result);
+                    futureContacts.complete(contacts.get(0));
+                });
+        return futureContacts;
+    }
+
     public CompletableFuture<List<Contact>> findContacts(String clientUserName) {
         CompletableFuture<List<Contact>> futureContacts = new CompletableFuture<>();
         contactsCollection.find(new Document("clientUserName", clientUserName)).into(new ArrayList<>(),
@@ -111,19 +125,79 @@ public class Queries {
         return futureMessages;
     }
 
+    public CompletableFuture<List<Message>> findGroupMessages(String clientUserName,
+                                                              String groupId,
+                                                              boolean exceptClient) {
+        CompletableFuture<List<Message>> futureMessages = new CompletableFuture<>();
+        Document doc = new Document("groupId", groupId);
+        if (!exceptClient)
+            doc.append("clientUserName", clientUserName);
+        else
+            doc.append("clientUserName", new Document("$ne", clientUserName));
+        doc.append("groupId", new Document("$exists", true));
+        messageCollection.find(doc).into(new ArrayList<>(),
+                (result, t) -> {
+                    log.info("db query: findMessages -> found documents: #" + result.size());
+                    List<Message> messages = convertDocumentsToMessages(result);
+                    futureMessages.complete(messages);
+                });
+        return futureMessages;
+    }
+
+    private CompletableFuture<List<Group>> findGroupsIfOwner(String clientUserName) {
+        CompletableFuture<List<Group>> futureMessages = new CompletableFuture<>();
+        Document doc = new Document("creator_id", clientUserName);
+
+        log.info(doc.toJson());
+        groupCollection.find(doc).into(new ArrayList<>(),
+                (result, t) -> {
+                    log.info("db query: findMessages -> found documents: #" + result.size());
+                    List<Group> messages = convertDocumentsToGroups(result);
+                    futureMessages.complete(messages);
+                });
+        return futureMessages;
+    }
+
+    private CompletableFuture<List<Group>> findGroupsIfMember(String clientUserName) {
+        CompletableFuture<List<Group>> futureMessages = new CompletableFuture<>();
+        Document doc = new Document("members", clientUserName);
+
+        groupCollection.find(doc).into(new ArrayList<>(),
+                (result, t) -> {
+                    log.info("db query: findMessages -> found documents: #" + result.size());
+                    List<Group> messages = convertDocumentsToGroups(result);
+                    futureMessages.complete(messages);
+                });
+        return futureMessages;
+    }
+
+    public CompletableFuture<List<Group>> findGroups(String clientUserName) throws ExecutionException, InterruptedException {
+        CompletableFuture<List<Group>> futureMessages = new CompletableFuture<>();
+
+        CompletableFuture<List<Group>> f1 = findGroupsIfOwner(clientUserName);
+        CompletableFuture<List<Group>> f2 = findGroupsIfMember(clientUserName);
+        List<Group> g1 = f1.get();
+        List<Group> g2 = f2.get();
+        futureMessages.complete(Stream.concat(g1.stream(), g2.stream()).collect(Collectors.toList()));
+
+        return futureMessages;
+    }
+
     private List<User> convertDocumentsToUsers(List<Document> documents) {
-        return documents.stream().map(document -> new User(document.getString("_id"),
-                document.getString("password"),
-                document.getString("firstName"),
-                document.getString("lastName"),
-                document.getString("phoneNumber"))).collect(Collectors.toList());
+        return documents.stream()
+                .map(document -> new User(document.getString("_id"),
+                        document.getString("password"),
+                        document.getString("firstName"),
+                        document.getString("lastName"),
+                        document.getString("phoneNumber"))).collect(Collectors.toList());
     }
 
     private List<Contact> convertDocumentsToContacts(List<Document> documents) {
-        return documents.stream().map(document -> new Contact(document.getString("clientUserName"),
-                document.getString("contactUserName"),
-                document.getString("firstName"),
-                document.getString("lastName"))).collect(Collectors.toList());
+        return documents.stream()
+                .map(document -> new Contact(document.getString("clientUserName"),
+                        document.getString("contactUserName"),
+                        document.getString("firstName"),
+                        document.getString("lastName"))).collect(Collectors.toList());
     }
 
     private List<Message> convertDocumentsToMessages(List<Document> documents) {
@@ -133,5 +207,12 @@ public class Queries {
                     document.getString("content"), document.get("contactsUserName", List.class)));
         }
         return messages;
+    }
+
+    private List<Group> convertDocumentsToGroups(List<Document> documents) {
+        return documents.stream()
+                .map(document -> new Group(document.getString("groupId"),
+                        document.getString("creatorId"),
+                        document.getString("name"))).collect(Collectors.toList());
     }
 }

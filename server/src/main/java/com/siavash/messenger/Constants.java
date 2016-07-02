@@ -10,7 +10,7 @@ public class Constants {
     public static final String CONTACTS = "contacts";
     public static final String MESSAGE = "message";
     public static final String REPORTED_USER = "reported_user";
-    public static final String GROUP = "group";
+    public static final String GROUP = "groups";
     public static final String GROUP_MEMBERS = "group_members";
     public static final String GROUP_MESSAGES = "group_messages";
     public static final String CHANNEL = "channel";

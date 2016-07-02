@@ -30,11 +30,14 @@ public class MainApp extends Application {
         manager.loadScreen(Screens.SIGN_UP.id, Screens.SIGN_UP.resource);
         manager.loadScreen(Screens.SIGN_IN.id, Screens.SIGN_IN.resource);
 
-        manager.setScreen(Screens.SIGN_IN.id);
+//        manager.setScreen(Screens.SIGN_IN.id);
+        manager.loadScreen(Screens.FIRST_PAGE.id, Screens.FIRST_PAGE.resource);
+        manager.loadScreen(Screens.PROFILE.id, Screens.PROFILE.resource);
+        manager.setScreen(Screens.FIRST_PAGE.id);
 
         Group root = new Group();
         Parent menu;
-        if ((menu = getMenu()) != null)
+        if ((menu = getMenu(manager)) != null)
             root.getChildren().addAll(new VBox(menu, manager));
         else
             root.getChildren().addAll(manager);
@@ -42,9 +45,13 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
-    private Parent getMenu() {
+    private Parent getMenu(ScreenManager manager) {
         try {
-            return Util.loadFxmlObject(new FXMLLoader(), Util.getAbsolutePath(Screens.MENU.resource));
+            FXMLLoader loader = new FXMLLoader();
+            Parent layout = Util.loadFxmlObject(loader, Util.getAbsolutePath(Screens.MENU.resource));
+            ParentProvider provider = loader.getController();
+            provider.setParent(manager);
+            return layout;
         } catch (IOException e) {
             log.info("getMenu: couldn't load menu resources -> " + e.getMessage());
         }

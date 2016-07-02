@@ -79,7 +79,7 @@ public class ScreenManager extends StackPane {
                 getChildren().add(screens.get(name));
                 Timeline fadeIn = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-                        new KeyFrame(new Duration(2000), new KeyValue(opacity, 1.0)));
+                        new KeyFrame(new Duration(800), new KeyValue(opacity, 1.0)));
                 fadeIn.play();
             }
         } else {

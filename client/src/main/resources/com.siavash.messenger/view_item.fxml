@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml" prefHeight="60.0" prefWidth="260.0"
+         stylesheets="/styles/item_styles.css">
+    <ImageView fx:id="image" fitHeight="60" fitWidth="60.0" pickOnBounds="true" preserveRatio="true"/>
+    <SplitPane prefWidth="20.0"/>
+    <ImageView fx:id="type" fitHeight="30" fitWidth="30" pickOnBounds="true" preserveRatio="true"/>
+    <Label fx:id="name" text="Name">
+        <HBox.margin>
+            <Insets top="20.0"/>
+        </HBox.margin>
+    </Label>
+    <SplitPane prefWidth="10.0"/>
+</fx:root>

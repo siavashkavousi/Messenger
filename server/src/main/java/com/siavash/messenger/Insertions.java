@@ -3,7 +3,6 @@ package com.siavash.messenger;
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -53,12 +52,27 @@ public final class Insertions {
         messageCollection.insertOne(doc, (result, t) -> Util.logInsertionSuccess(Constants.MESSAGE));
     }
 
-    public void insertGroup(ObjectId creatorId, String title, String groupId) {
-        Document doc = new Document("creator_id", creatorId)
-                .append("title", title)
-                .append("group_id", groupId);
+    public void insertGroup(String groupId,
+                            String creatorId,
+                            String name) {
+        Document doc = new Document("_id", groupId)
+                .append("creator_id", creatorId)
+                .append("name", name);
 
         MongoCollection<Document> groupCollection = db.getCollection(Constants.GROUP);
         groupCollection.insertOne(doc, (result, t) -> Util.logInsertionSuccess(Constants.GROUP));
+    }
+
+    public void insertGroupMessage(String clientUserName,
+                                   String content,
+                                   List<String> contactsUserName,
+                                   String groupId) {
+        Document doc = new Document("clientUserName", clientUserName)
+                .append("content", content)
+                .append("contactsUserName", contactsUserName)
+                .append("groupId", groupId);
+
+        MongoCollection<Document> messageCollection = db.getCollection(Constants.MESSAGE);
+        messageCollection.insertOne(doc, (result, t) -> Util.logInsertionSuccess(Constants.MESSAGE));
     }
 }

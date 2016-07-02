@@ -1,23 +1,29 @@
 package com.siavash.messenger.controllers;
 
 import com.siavash.messenger.*;
-import com.siavash.messenger.views.ContactView;
+import com.siavash.messenger.views.ItemView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -30,90 +36,206 @@ public class FirstPage implements ParentProvider {
     @FXML
     private TextField searchField;
     @FXML
-    private ListView<ContactView> messagedContacts;
+    private Button createGroup;
+    @FXML
+    private Button createChannel;
+    @FXML
+    private ListView<ItemView> itemList;
     @FXML
     private AnchorPane messageArea;
 
+    private ScreenManager messagesManager = new ScreenManager();
+
     @FXML
     private void initialize() {
+        messageArea.getChildren().add(messagesManager);
+
         searchField.setOnKeyPressed(event -> {
-            messagedContacts.getItems().clear();
+            itemList.getItems().clear();
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!searchField.getText().isEmpty()) {
-                    findSpecificContact(searchField.getText(),
-                            contacts -> Platform.runLater(() -> messagedContacts.setItems(coupleContactsToViews(contacts))));
+//                    findSpecificContact(searchField.getText(),
+//                            contacts -> Platform.runLater(() -> itemList.setItems(coupleItemsToViews(contacts))));
                 } else {
-                    requestContacts((contacts) -> {
-                        Util.contactViews = coupleContactsToViews(contacts);
-                        Platform.runLater(() -> messagedContacts.setItems(Util.contactViews));
-                    });
+                    requestContacts(contacts -> Util.itemViews.addAll(coupleItemsToViews(contacts, "contact")));
+                    requestGroups(groups -> Util.itemViews.addAll(coupleItemsToViews(groups, "group")));
                 }
             }
         });
 
-        requestContacts((contacts) -> {
-            Util.contactViews = coupleContactsToViews(contacts);
-            messagedContacts.setItems(Util.contactViews);
+        createGroup.setOnAction(event -> {
+            Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.setTitle("Create Group");
+
+            ButtonType createGroupType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(createGroupType, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField groupId = new TextField();
+            groupId.setPromptText("Group Id");
+            TextField groupName = new TextField();
+            groupName.setPromptText("Group Name");
+
+            grid.add(new Label("Group Id:"), 0, 0);
+            grid.add(groupId, 1, 0);
+            grid.add(new Label("Group Name:"), 0, 1);
+            grid.add(groupName, 1, 1);
+
+            Node createGroupButton = dialog.getDialogPane().lookupButton(createGroupType);
+            createGroupButton.setDisable(true);
+
+            groupId.textProperty().addListener((observable, oldValue, newValue) -> {
+                createGroupButton.setDisable(newValue.trim().isEmpty());
+            });
+
+            dialog.getDialogPane().setContent(grid);
+            Platform.runLater(groupId::requestFocus);
+
+            dialog.setResultConverter(param -> {
+                if (param == createGroupType)
+                    return new Pair<>(groupId.getText(), groupName.getText());
+                return null;
+            });
+
+            Optional<Pair<String, String>> result = dialog.showAndWait();
+            result.ifPresent(pair -> {
+                Group group = new Group(pair.getKey(),
+                        Util.user.getUserName(),
+                        pair.getValue());
+                Map<String, String> map = new HashMap<>();
+                map.put(groupId.getText(), groupName.getText());
+                Util.itemViews.addAll(coupleItemsToViews(map, "group"));
+                createGroup(group, dialog::close);
+            });
         });
 
-        messagedContacts.getSelectionModel().selectedItemProperty()
+        createChannel.setOnAction(event -> {
+
+        });
+
+        itemList.setItems(Util.itemViews);
+        requestContacts(contacts -> Util.itemViews.addAll(coupleItemsToViews(contacts, "contact")));
+        requestGroups(groups -> Util.itemViews.addAll(coupleItemsToViews(groups, "group")));
+
+        itemList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, contactView) -> {
-                    log.info("messaged contacts view - selected item name: " + contactView.getContactFirstName());
-                    try {
-                        messageArea.getChildren().remove(0);
-                    } catch (IndexOutOfBoundsException e) {
-                        log.info("No child in AnchorPane - " + e.getMessage());
+                    Util.currentItemView = contactView;
+
+                    if (contactView.getItemType().equals("contact")) {
+                        messagesManager.loadScreen(Screens.CONTACT_MESSAGES.id,
+                                Screens.CONTACT_MESSAGES.resource);
+                        messagesManager.setScreen(Screens.CONTACT_MESSAGES.id);
+                    } else if (contactView.getItemType().equals("group")) {
+                        messagesManager.loadScreen(Screens.GROUP_MESSAGES.id,
+                                Screens.GROUP_MESSAGES.resource);
+                        messagesManager.setScreen(Screens.GROUP_MESSAGES.id);
                     }
-
-                    ScreenManager manager = new ScreenManager();
-
-                    ContactMessagesModel model = ContactMessagesModel.newContactMessagesModel()
-                            .clientUserName(contactView.getClientUserName())
-                            .contactUserName(contactView.getContactUserName())
-                            .contactFirstName(contactView.getContactFirstName())
-                            .contactLastName(contactView.getContactLastName()).build();
-                    manager.loadScreen(Screens.CONTACT_MESSAGES.id,
-                            Screens.CONTACT_MESSAGES.resource, model);
-
-                    manager.setScreen(Screens.CONTACT_MESSAGES.id);
-                    messageArea.getChildren().add(manager);
                 });
     }
 
-    private void requestContacts(Consumer<List<Contact>> postResult) {
+    private void requestContacts(Consumer<Map<String, String>> postResult) {
         Call<List<Contact>> request = MainApp.restApi.contacts(Util.user.getUserName());
         request.enqueue(new Callback<List<Contact>>() {
             @Override
             public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
                 List<Contact> contacts = response.body();
-                postResult.accept(contacts);
+                if (contacts != null && !contacts.isEmpty()) {
+                    Map<String, String> result = new HashMap<>();
+                    for (Contact contact : contacts)
+                        result.put(contact.getContactUserName(), contact.getFirstName() + " " + contact.getLastName());
+                    postResult.accept(result);
+                }
             }
 
             @Override
             public void onFailure(Call<List<Contact>> call, Throwable t) {
             }
         });
-
     }
 
-    private ObservableList<ContactView> coupleContactsToViews(List<Contact> contacts) {
-        List<ContactView> contactViews = contacts.stream()
-                .map(contact -> new ContactView(new Image("/images/contact.png"), contact))
-                .collect(Collectors.toList());
-        return FXCollections.observableArrayList(contactViews);
-    }
-
-    private void findSpecificContact(String name, Consumer<List<Contact>> postResult) {
-        MainApp.restApi.findContact(Util.user.getUserName(), name).enqueue(new Callback<List<Contact>>() {
+    private void requestGroups(Consumer<Map<String, String>> postResult) {
+        Call<List<Group>> request = MainApp.restApi.groups(Util.user.getUserName());
+        request.enqueue(new Callback<List<Group>>() {
             @Override
-            public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
-                List<Contact> contacts = response.body();
-                postResult.accept(contacts);
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                List<Group> groups = response.body();
+                if (groups != null && !groups.isEmpty()) {
+                    Map<String, String> result = new HashMap<>();
+                    for (Group group : groups)
+                        result.put(group.getGroupId(), group.getName());
+                    postResult.accept(result);
+                }
             }
 
             @Override
-            public void onFailure(Call<List<Contact>> call, Throwable t) {
+            public void onFailure(Call<List<Group>> call, Throwable t) {
 
+            }
+        });
+    }
+
+    private ObservableList<ItemView> coupleItemsToViews(Map<String, String> items, String type) {
+        Image image = new Image("/images/contact.png");
+        Image typeImage = null;
+        switch (type) {
+            case "contact":
+                typeImage = new Image("/images/contact_icon.png");
+                break;
+            case "group":
+                typeImage = new Image("/images/group_icon.png");
+                break;
+            case "channel":
+                typeImage = new Image("/images/channel_icon.png");
+                break;
+        }
+        Image finalTypeImage = typeImage;
+
+        List<ItemView> itemViews = items.entrySet()
+                .stream()
+                .map(item -> new ItemView(item.getKey(), image, finalTypeImage, item.getValue(), type))
+                .collect(Collectors.toList());
+        return FXCollections.observableArrayList(itemViews);
+    }
+
+//    private void findSpecificContact(String name, Consumer<List<Contact>> postResult) {
+//        MainApp.restApi.findContacts(Util.user.getUserName(), name).enqueue(new Callback<List<Contact>>() {
+//            @Override
+//            public void onResponse(Call<List<Contact>> call, Response<List<Contact>> response) {
+//                List<Contact> contacts = response.body();
+//                postResult.accept(contacts);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Contact>> call, Throwable t) {
+//
+//            }
+//        });
+//    }
+
+    private void createGroup(Group group, Runnable postResult) {
+        MainApp.restApi.createGroup(group).enqueue(new Callback<com.siavash.messenger.Response>() {
+            @Override
+            public void onResponse(Call<com.siavash.messenger.Response> call, retrofit2.Response<com.siavash.messenger.Response> response) {
+                log.info("createGroup: onResponse -> response status code: " + response.code());
+                if (!Util.checkResponseMessage(response))
+                    return;
+
+                com.siavash.messenger.Response message = response.body();
+                if (message != null && message.getMessage().equals(Constants.HTTP_ACCEPTED)) {
+                    log.info("createGroup: onResponse -> success: " + message);
+                    postResult.run();
+                } else {
+                    log.info("createGroup: onResponse -> failure: " + message);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.siavash.messenger.Response> call, Throwable t) {
+                log.info("createGroup: onFailure -> something happened!");
             }
         });
     }
